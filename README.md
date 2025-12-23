@@ -16,7 +16,7 @@ _Caption: The user selects notes on the fretboard and the app identifies the cho
 
 _Caption: The app displays different voicings for F major chord. along with other chord matches._
 
-![Trill Desktop Chord Library](public/images/demo/chordlookup.png.png)
+![Trill Desktop Chord Library](public/images/demo/chordlookup.png)
 
 _Caption: An additional feature allows users to browse different chords using the chord library._
 
