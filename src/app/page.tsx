@@ -26,7 +26,7 @@ export default function Home() {
           <Link href="../dashboard">
             <Button
               arrow={"right"}
-              className="  px-6 py-3 bg-primary rounded-lg  border-solid  text-[14px] lg:text-lg  not-italic font-semibold leading-[18px]"
+              className="hover:cursor-pointer px-6 py-3 bg-primary rounded-lg  border-solid  text-[14px] lg:text-lg  not-italic font-semibold leading-[18px]"
             >
               Try it
             </Button>

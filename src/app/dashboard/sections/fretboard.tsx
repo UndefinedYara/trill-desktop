@@ -126,8 +126,12 @@ export function Fretboard() {
             })}
           </div>
         </div>
-        <div className="flex justify-end py-5">
-          <Button loading={chordMatchCollection.isLoading} onClick={onFind}>
+        <div className="flex justify-end pt-10">
+          <Button
+            className="hover:cursor-pointer"
+            loading={chordMatchCollection.isLoading}
+            onClick={onFind}
+          >
             Find Chord
           </Button>
         </div>
