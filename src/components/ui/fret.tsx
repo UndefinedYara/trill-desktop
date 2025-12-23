@@ -12,7 +12,10 @@ interface FretProps {
   doubleMarker?: boolean;
   style: React.CSSProperties;
   mutedStrings: number[];
-  updateFunction: (id: number, newMap: Map<number, number[][]>) => void;
+  fretAndStringsArray: [number, number][];
+  setFretAndStringsArray: React.Dispatch<
+    React.SetStateAction<[number, number][]>
+  >;
 }
 
 export function Fret({
@@ -22,12 +25,11 @@ export function Fret({
   doubleMarker,
   style,
   mutedStrings,
-  updateFunction,
+  fretAndStringsArray,
+  setFretAndStringsArray,
 }: FretProps) {
   const [middlePoint, setMiddlePoint] = useState(10);
-  const [fretInfoMap, setFretInfoMap] = useState<Map<number, number[][]>>(
-    () => new Map()
-  );
+
   const ref = useRef<HTMLDivElement>(null);
   const isFirstMount = useIsFirstMount();
 
@@ -37,8 +39,7 @@ export function Fret({
       setMiddlePoint(dot);
       return;
     }
-    updateFunction(fretNumber, fretInfoMap);
-  }, [middlePoint, fretInfoMap]);
+  }, [middlePoint]);
 
   return (
     <div
@@ -49,21 +50,21 @@ export function Fret({
         className
       )}
     >
-      {new Array(6).fill(9).map((_, index) => {
+      {new Array(6).fill(0).map((_, index) => {
         return (
           <String
             key={index}
             stringNumber={index + 1}
-            middlePoint={middlePoint}
             fretNumber={fretNumber}
-            setFretInfoMap={setFretInfoMap}
+            fretAndStringsArray={fretAndStringsArray}
+            setFretAndStringsArray={setFretAndStringsArray}
             mutedStrings={mutedStrings}
           />
         );
       })}
       {marker && (
         <div
-          className="absolute top-[64px]  h-4 w-4 rounded-full bg-white"
+          className="absolute top-16  h-4 w-4 rounded-full bg-white"
           style={{ left: `${middlePoint}px` }}
         />
       )}

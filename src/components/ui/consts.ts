@@ -1,0 +1,6 @@
+export const FRET_COUNT = 18;
+export const STRING_COUNT = 6;
+export const FRET_MARKERS = [3, 5, 7, 9, 15, 17, 19, 23];
+export const INITIAL_FRET_WIDTH = 205;
+export const FRET_WIDTH_DECREMENT = 5;
+export const MUTED_STRING_COLOR = "#8c120c";

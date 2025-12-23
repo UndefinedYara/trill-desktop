@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 declare module "ChordModule" {
   type ChordType = {
     id: ?number;

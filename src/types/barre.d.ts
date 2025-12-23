@@ -5,6 +5,7 @@ declare module "BarreModule" {
     capo: boolean;
     lite: boolean;
     finger: 0 | 1 | 2 | 3 | 4 | 5;
+    baseFret: number;
   };
 
   type FretXPositionType = {

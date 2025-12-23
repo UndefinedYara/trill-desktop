@@ -15,7 +15,7 @@ const offsets: Offsets = {
   },
 };
 
-const getNeckHorizonalLine = (pos: number, strings: number): string =>
+const getNeckHorizontalLine = (pos: number, strings: number): string =>
   `M ${offsets[strings].x} ${12 * pos} H ${offsets[strings].length}`;
 
 const getNeckVerticalLine = (pos: number, strings: number) =>
@@ -23,7 +23,7 @@ const getNeckVerticalLine = (pos: number, strings: number) =>
 
 const getNeckPath = (strings: number, fretsOnChord: number) =>
   Array.from({ length: fretsOnChord + 1 })
-    .map((_, pos) => getNeckHorizonalLine(pos, strings))
+    .map((_, pos) => getNeckHorizontalLine(pos, strings))
     .join(" ")
     .concat(
       Array.from({ length: strings })
@@ -85,7 +85,7 @@ const Neck: React.FC<NeckProps> = ({
           fill="#444"
           fontFamily="Verdana"
           x={getBarreOffset(strings, frets, baseFret, capo)}
-          y="8"
+          y="2.5"
         >
           {baseFret}fr
         </text>

@@ -28,7 +28,14 @@ const onlyBarres = (frets: number[], barre: number) => {
   } else return [{ position: -1, value: -1 }];
 };
 
-const Barre: React.FC<BarreType> = ({ barre, frets, capo, finger, lite }) => {
+const Barre: React.FC<BarreType> = ({
+  barre,
+  frets,
+  capo,
+  finger,
+  lite,
+  baseFret = 1,
+}) => {
   const strings = frets.length;
   const barreFrets = onlyBarres(frets, barre) || [{ position: 0, value: 0 }];
 
@@ -36,7 +43,8 @@ const Barre: React.FC<BarreType> = ({ barre, frets, capo, finger, lite }) => {
   const string2 = barreFrets[barreFrets.length - 1].position;
   const width = (string2 - string1) * 10;
 
-  const y = fretYPosition[barre - 1];
+  const relativeBarre = barre > 0 ? barre - baseFret + 1 : 0;
+  const y = fretYPosition[relativeBarre - 1];
 
   return (
     <g>
@@ -44,7 +52,7 @@ const Barre: React.FC<BarreType> = ({ barre, frets, capo, finger, lite }) => {
         <g>
           <g
             transform={`translate(${getStringPosition(strings, strings)}, ${
-              positions && positions.fret[barreFrets[0].value]
+              positions && positions.fret[relativeBarre]
             })`}
           >
             <path
@@ -61,14 +69,14 @@ const Barre: React.FC<BarreType> = ({ barre, frets, capo, finger, lite }) => {
           <rect
             fill="#555"
             x={fretXPosition[strings][0]}
-            y={fretYPosition[barre - 1]}
+            y={y}
             width={(strings - 1) * 10}
             fillOpacity={0.2}
             height={8.25}
           />
           <g
             transform={`translate(${getStringPosition(1, strings)}, ${
-              positions.fret[barreFrets[0].value]
+              positions.fret[relativeBarre]
             })`}
           >
             <path
@@ -85,17 +93,20 @@ const Barre: React.FC<BarreType> = ({ barre, frets, capo, finger, lite }) => {
         </g>
       )}
       {barreFrets &&
-        barreFrets.map((fret) => (
-          <circle
-            key={fret.position && fret.position}
-            strokeWidth="0.25"
-            stroke="#444"
-            fill="#444"
-            cx={getStringPosition(strings - fret.position, strings)}
-            cy={positions && positions.fret[fret.value]}
-            r={4}
-          />
-        ))}
+        barreFrets.map((fret) => {
+          const relativeFret = fret.value > 0 ? fret.value - baseFret + 1 : 0;
+          return (
+            <circle
+              key={fret.position && fret.position}
+              strokeWidth="0.25"
+              stroke="#444"
+              fill="#444"
+              cx={getStringPosition(strings - fret.position, strings)}
+              cy={positions && positions.fret[relativeFret]}
+              r={4}
+            />
+          );
+        })}
       <rect
         fill="#444"
         x={fretXPosition[strings][string1]}
@@ -105,19 +116,22 @@ const Barre: React.FC<BarreType> = ({ barre, frets, capo, finger, lite }) => {
       />
       {!lite &&
         finger &&
-        barreFrets.map((fret) => (
-          <text
-            key={fret.position}
-            fontSize="3pt"
-            fontFamily="Verdana"
-            textAnchor="middle"
-            fill="white"
-            x={getStringPosition(strings - fret.position, strings)}
-            y={positions.finger[fret.value]}
-          >
-            {finger}
-          </text>
-        ))}
+        barreFrets.map((fret) => {
+          const relativeFret = fret.value > 0 ? fret.value - baseFret + 1 : 0;
+          return (
+            <text
+              key={fret.position}
+              fontSize="3pt"
+              fontFamily="Verdana"
+              textAnchor="middle"
+              fill="white"
+              x={getStringPosition(strings - fret.position, strings)}
+              y={positions.finger[relativeFret]}
+            >
+              {finger}
+            </text>
+          );
+        })}
     </g>
   );
 };

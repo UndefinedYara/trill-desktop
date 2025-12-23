@@ -2,15 +2,11 @@
 
 import Image from "next/image";
 import Link from "next/link";
-interface HeaderProps {
-  open: boolean;
-  setOpen: (open: boolean) => void;
-}
 
-export function Header({}: HeaderProps) {
+export function Header() {
   return (
-    <header className="fixed top-10 flex justify-center w-full z-[1]">
-      <div className="flex bg-[#262626] w-3/5 rounded-lg justify-between px-5 py-3">
+    <header className="fixed top-10 flex justify-center w-full z-1">
+      <div className="flex bg-white/3 backdrop-blur-2xl w-3/5 rounded-2xl justify-between px-5 py-3">
         <div className="flex items-center justify-center ">
           <div className="w-14">
             <Image
@@ -24,7 +20,7 @@ export function Header({}: HeaderProps) {
         </div>
         <div className="flex items-center justify-center gap-4 font-manrope font-light">
           <Link href="#fretboard">Fretboard</Link>
-          <Link href="#lookup">Chord Lookup</Link>
+          <Link href="#library">Chord Library</Link>
         </div>
       </div>
     </header>

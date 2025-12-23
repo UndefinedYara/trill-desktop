@@ -26,8 +26,10 @@ const Dot: React.FC<DotType> = ({
   finger,
   strings,
   lite = false,
-}) =>
-  fret === -1 ? (
+  baseFret = 1,
+}) => {
+  const relativeFret = fret > 0 ? fret - baseFret + 1 : 0;
+  return fret === -1 ? (
     <text
       fontSize="0.7rem"
       fill="#444"
@@ -45,7 +47,7 @@ const Dot: React.FC<DotType> = ({
         stroke="#444"
         fill={fret === 0 ? "transparent" : "#444"}
         cx={getStringPosition(string, strings)}
-        cy={positions.fret[fret]}
+        cy={positions.fret[relativeFret]}
         r={fret === 0 ? radius["open"] : radius["fret"]}
       />
 
@@ -56,12 +58,13 @@ const Dot: React.FC<DotType> = ({
           textAnchor="middle"
           fill="white"
           x={getStringPosition(string, strings)}
-          y={positions.finger[fret]}
+          y={positions.finger[relativeFret]}
         >
           {fret}
         </text>
       )}
     </g>
   );
+};
 
 export default Dot;

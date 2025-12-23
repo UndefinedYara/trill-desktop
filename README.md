@@ -1,43 +1,48 @@
-#  🎸  Guitar Chord Dashboard (Frontend)
+# Trill Desktop
 
-A sleek guitar chord dashboard built with **Next.js 15**. This frontend connects to the NestJS backend and allows users to:
+Trill Desktop is a web application that helps musicians identify chords from notes played on a virtual fretboard. It's a powerful tool for learning and understanding music theory.
 
--  Lookup guitar chords by submitting fret and finger data.
--  Browse a full visual chord library.
--  Responsive, fast, and modern interface powered by the App Router.
+## Features
 
+### Chord Finder
 
-##  Features
+The core feature of Trill Desktop is the Chord Finder. It allows you to select notes on a virtual guitar fretboard and identify the chord you are playing.
 
--  **Chord Fretboard Lookup UI**: Users can input frets/fingers and view matching chords visually.
--  **Chord Library View**: Scroll through a clean view of all chords.
+Here's how it works:
 
----
+1.  **Select Notes:** Click on the fretboard to select the notes of a chord.
+2.  **Find Chord:** Click the "Find Chord" button.
+3.  **View Results:** The application will display the most likely chord names for the selected notes, along with different ways to play the chord.
 
-##  Tech Stack
+### How it Works Under the Hood
 
-- **Framework:** [Next.js 15 (App Router)](https://nextjs.org)
-- **Styling:** Tailwind CSS
-- **Routing:** App Directory (file-based routing)
-- **Data Fetching:** Fetch API
-- **Deployment:** Vercel-ready
+The Chord Finder uses a combination of client-side music theory analysis and a backend service to provide fast and accurate results.
 
----
----
+1.  **Local Inference (Client-Side):** When you click "Find Chord", the application first analyzes the notes you've selected directly in your browser.
+    *   It converts the fret and string positions to musical notes.
+    *   A music theory engine then identifies the most likely chord names by comparing the selected notes to a vast database of chord formulas.
 
-## ⚠️ Security Note: Middleware in Next.js 15
+2.  **Data Fetching (Backend):**
+    *   The top 3 best matches are then sent to a backend service.
+    *   The backend searches its library for all the different ways to play the identified chords.
+    *   This information is sent back to the application and displayed to you.
 
-Next.js 15 introduces new features for middleware — but **you should be aware**:
+## Getting Started
 
-> 🔒 **Middleware runs on the Edge** and is shared across all users — avoid placing any **user-sensitive logic**, **auth tokens**, or private headers inside middleware code.
+To run this project locally, follow these steps:
 
-If you’re using middleware for routing or auth checks, keep in mind:
-- It **cannot access request bodies**.
-- It **does not run in a secure, per-user context**.
-- It should **never perform sensitive server logic** — use Server Actions or API routes for that.
-
-👉 Learn more: [Next.js Middleware Caveats](https://nextjs.org/docs/app/building-your-application/routing/middleware#caveats)
-
----
-
-
+1.  **Clone the repository:**
+    ```bash
+    git clone https://github.com/your-username/trill-desktop.git
+    ```
+2.  **Install dependencies:**
+    ```bash
+    cd trill-desktop
+    npm install
+    ```
+3.  **Run the development server:**
+    ```bash
+    npm run dev
+    ```
+4.  **Open your browser:**
+    Navigate to `http://localhost:3000` to see the application.

@@ -1,34 +1,25 @@
-import { ChordLibrary } from "@/components/ui/chordlibrary";
+import { ChordLibrary } from "./sections/chordlibrary";
 import { Fretboard } from "./sections/fretboard";
-
+import { getChordKeys, getChordSuffixes } from "@/lib/firebase/chord-queries";
 export default async function Page({}) {
-  const searchData = await getSearchData();
-
+  const searchData = await getChordSearchData();
   return (
-    <section className="indent pt-30 pb-20 w-full h-full ">
+    <section className="indent pt-25 pb-20 w-full h-full flex flex-col gap-16 ">
       <Fretboard />
       <ChordLibrary keys={searchData.keys} suffixes={searchData.suffixes} />
     </section>
   );
 }
 
-async function getSearchData() {
-  const urls = [
-    process.env.CHORD_SERVICE_URL + "/chord/key",
-    process.env.CHORD_SERVICE_URL + "/chord/suffix",
-  ];
-
-  const promises = urls.map(async (url: string) => {
-    try {
-      const response = await fetch(url);
-      return await response.json();
-    } catch (error: unknown) {
-      console.log(error);
-      return null;
-    }
-  });
-
-  const data = await Promise.all(promises);
-
-  return { keys: data[0], suffixes: data[1] };
+async function getChordSearchData() {
+  try {
+    const [keys, suffixes] = await Promise.all([
+      getChordKeys(),
+      getChordSuffixes(),
+    ]);
+    return { keys, suffixes };
+  } catch (error) {
+    console.error(error);
+    return { keys: [], suffixes: [] };
+  }
 }

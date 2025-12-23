@@ -11,7 +11,9 @@ const onlyDots = (chord: ChordType) => {
 };
 
 const Chord: React.FC<ChordProps> = ({ chord, instrument, lite = false }) => {
-  console.log(chord.barres);
+  const fretsInChord = chord.frets.filter((fret: number) => fret > 0);
+  const baseFret = fretsInChord.length ? Math.min(...fretsInChord) : 1;
+
   return chord ? (
     <svg
       width="100%"
@@ -26,7 +28,7 @@ const Chord: React.FC<ChordProps> = ({ chord, instrument, lite = false }) => {
           frets={chord.frets}
           capo={chord.capo}
           fretsOnChord={instrument.fretsOnChord}
-          baseFret={chord.baseFret}
+          baseFret={baseFret}
           lite={lite}
         />
 
@@ -41,6 +43,7 @@ const Chord: React.FC<ChordProps> = ({ chord, instrument, lite = false }) => {
               }
               frets={chord.frets}
               lite={lite}
+              baseFret={baseFret}
             />
           ))}
         {onlyDots(chord).map((fret) => (
@@ -51,6 +54,7 @@ const Chord: React.FC<ChordProps> = ({ chord, instrument, lite = false }) => {
             strings={instrument.strings}
             finger={chord.fingers && chord.fingers[fret.position]}
             lite={lite}
+            baseFret={baseFret}
           />
         ))}
       </g>
