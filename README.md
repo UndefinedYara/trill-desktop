@@ -22,9 +22,10 @@ The Chord Finder uses a combination of client-side music theory analysis and a b
     *   It converts the fret and string positions to musical notes.
     *   A music theory engine then identifies the most likely chord names by comparing the selected notes to a vast database of chord formulas.
 
-2.  **Data Fetching (Backend):**
-    *   The top 3 best matches are then sent to a backend service.
-    *   The backend searches its library for all the different ways to play the identified chords.
+2.  **Data Fetching (Server-Side):**
+    *   The top 3 best matches are then sent to Firebase.
+    *   API Routes connects to Firebase and searches the chord library for all the different ways to play the identified chords.
+    *   Firebase is seeded using the chords from https://github.com/tombatossals/chords-db. Special shoutout! :)
     *   This information is sent back to the application and displayed to you.
 
 ## Getting Started
@@ -33,7 +34,7 @@ To run this project locally, follow these steps:
 
 1.  **Clone the repository:**
     ```bash
-    git clone https://github.com/your-username/trill-desktop.git
+    git clone https://github.com/undefinedyara/trill-desktop.git
     ```
 2.  **Install dependencies:**
     ```bash
