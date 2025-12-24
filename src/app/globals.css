@@ -10,16 +10,7 @@
   --color-popover: 0 0% 3.9%;
   --color-popover-foreground: 0 0% 98%;
 }
-:root {
-  --background: #000000;
-  --foreground: #ededed;
-  --color-primary: #ae1a12;
-  --color-border: #202124;
-  --color-card: 0 0% 3.9%;
-  --color-card-foreground: 0 0% 98%;
-  --color-popover: 0 0% 3.9%;
-  --color-popover-foreground: 0 0% 98%;
-}
+
 .indent {
   padding-left: 3rem;
   padding-right: 3rem;

@@ -1,6 +1,6 @@
 "use client";
 import { Fret } from "@/components/ui/fret";
-import { useRef, useState } from "react";
+import { useState } from "react";
 import { X } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
 import { ChordType } from "ChordModule";
