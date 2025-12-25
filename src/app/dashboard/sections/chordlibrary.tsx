@@ -18,7 +18,14 @@ export function ChordLibrary({ keys, suffixes }: ChordLibraryProps) {
 
   const chordCollection = useFindChordsByKeyAndSuffix(activeKey, activeSuffix);
   return (
-    <section className="indent w-full my-12 pb-5 flex flex-col gap-10 ">
+    <section
+      id="library"
+      className="indent w-full my-12 pb-5 flex flex-col gap-10 "
+    >
+      <div>
+        <h2 className="text-4xl font-bold">Library</h2>
+        <p>Discover more chords, positions, keys, and more. </p>
+      </div>
       {/* Key Selection */}
       <div className="grid grid-cols-10 gap-7 ">
         <div className="flex justify-between  gap-3 w-full col-span-10">

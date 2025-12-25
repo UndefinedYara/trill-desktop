@@ -54,6 +54,12 @@ export function Fretboard() {
     setMutedStrings(array);
   }
 
+  function onClear() {
+    setFretAndStringsArray([]);
+    setMutedStrings([]);
+    setBestChordMatches([]);
+  }
+
   function onFind() {
     const canonicalArray = convertToCanonicalArray(
       fretAndStringsArray,
@@ -81,10 +87,26 @@ export function Fretboard() {
   }
 
   return (
-    <section className="indent w-full mt-12 flex flex-col justify-center gap-10 ">
-      <div>
-        <h2 className="text-4xl font-semibold">Fretboard</h2>
-        <p>Find a chord&apos;s name by its notes </p>
+    <section
+      id="fretboard"
+      className="indent w-full mt-12 flex flex-col justify-center gap-10 "
+    >
+      <div className="flex items-center justify-between">
+        <div>
+          <h2 className="text-4xl font-bold">Fretboard</h2>
+          <p>
+            Noodling around? Find more about the chord you just played. Enter
+            notes down below.{" "}
+          </p>
+        </div>
+        <div className="flex justify-end pt-10">
+          <Button
+            className="hover:cursor-pointer bg-transparent"
+            onClick={onClear}
+          >
+            Clear Strings
+          </Button>
+        </div>
       </div>
       {/* Fretboard */}
       <div className="flex flex-col">
