@@ -4,38 +4,35 @@ async function testFirebase() {
   try {
     console.log("--- Starting Firebase Connection Test ---");
 
-    // Firebase app info
-    console.log("Firebase App initialized:", admin.app().name);
-
-    const projectIdFromEnv = process.env.FIREBASE_PROJECT_ID;
+    // Firebase Admin App
+    const appName = admin.app().name;
     const projectIdFromSdk = admin.app().options.projectId;
 
-    console.log("Project ID from env:", projectIdFromEnv);
-    console.log("Project ID from SDK:", projectIdFromSdk);
+    console.log("Firebase App initialized:", appName);
+    console.log(
+      "Project ID from service account:",
+      projectIdFromSdk ?? "not set"
+    );
 
-    if (!projectIdFromEnv || projectIdFromEnv !== projectIdFromSdk) {
+    if (!projectIdFromSdk) {
       console.warn(
-        "⚠ Warning: Project ID mismatch. Your service account might be for a different project!"
+        "⚠ Project ID is undefined. Check that your service account JSON is correct."
       );
     }
 
-    const snapshot = await db.collection("user").listDocuments();
-    console.log("All document IDs in 'user' collection:");
-    snapshot.forEach((doc) => console.log(" -", `"${doc.id}"`));
-
-    // List collections in the database
+    // List all collections in Firestore
     const collections = await db.listCollections();
     console.log("Collections in Firestore:");
     collections.forEach((col) => console.log(" -", col.id));
 
-    // Check if the 'user' collection exists
-    const userCollectionExists = collections.some((col) => col.id === "user");
-    if (!userCollectionExists) {
-      console.warn("⚠ The 'user' collection does not exist yet!");
-    }
+    // Attempt to read documents from 'user' collection
+    const userCollectionRef = db.collection("user");
+    const snapshot = await userCollectionRef.listDocuments();
+    console.log("All document IDs in 'user' collection:");
+    snapshot.forEach((doc) => console.log(" -", `"${doc.id}"`));
 
-    // List some documents in 'user'
-    const userSnapshot = await db.collection("user").limit(5).get();
+    // Show first 5 documents in 'user' collection
+    const userSnapshot = await userCollectionRef.limit(5).get();
     console.log(
       `Number of documents in 'user' collection: ${userSnapshot.size}`
     );
@@ -43,15 +40,14 @@ async function testFirebase() {
       console.log(` - doc id: ${doc.id}, data:`, doc.data())
     );
 
-    // Attempt to get a specific test document
-    const testDocId = "8TRGzR7sIGd15z8xq6xu"; // your doc ID
-    const docRef = db.collection("user").doc(testDocId);
-
+    // Optionally fetch a specific test document
+    const testDocId = "8TRGzR7sIGd15z8xq6xu"; // replace with an actual doc ID
+    const docRef = userCollectionRef.doc(testDocId);
     try {
       const doc = await docRef.get();
       if (!doc.exists) {
         console.warn(
-          `⚠ Test document '${testDocId}' does not exist (expected if you haven't created it yet).`
+          `⚠ Test document '${testDocId}' does not exist (expected if not created).`
         );
       } else {
         console.log("Test document exists:", doc.data());
@@ -66,7 +62,6 @@ async function testFirebase() {
     );
   } catch (error) {
     console.error("--- Firebase Connection Test FAILED ---");
-    console.error("An error occurred during the Firebase test:");
     console.error(error);
   }
 }

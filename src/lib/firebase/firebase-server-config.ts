@@ -1,14 +1,12 @@
 import * as admin from "firebase-admin";
-import fs from "fs";
-import path from "path";
+import "dotenv/config";
 
-// Build absolute path based on project root
-const serviceAccountPath = path.resolve(
-  process.cwd(),
-  "src/lib/firebase/service-account.json"
+// Decode the base64 service account JSON from env
+const serviceAccount = JSON.parse(
+  Buffer.from(process.env.FIREBASE_SERVICE_ACCOUNT_BASE64!, "base64").toString(
+    "utf8"
+  )
 );
-
-const serviceAccount = JSON.parse(fs.readFileSync(serviceAccountPath, "utf8"));
 
 if (!admin.apps.length) {
   admin.initializeApp({
