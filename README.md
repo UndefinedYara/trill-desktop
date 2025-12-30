@@ -95,8 +95,9 @@ To get a local copy up and running, follow these simple steps.
 
 4.  **Seed the Database:**
     - Run the seed script to populate your Firestore database with chord data. The `--write` flag is required to commit the data. Otherwise a dry-run is performed.
+      
     ```bash
-    npm run seed -- --write
+    npx tsx scripts/seed/seed.ts -- --write --path=../path/to/your/chords-db
     ```
 5.  **Run the Development Server:**
     ```bash
@@ -113,7 +114,7 @@ To get a local copy up and running, follow these simple steps.
 - `npx tsx scripts/seed/seed.ts`: Runs the database seeding script.
 
   - **--write**: (Required) Commits the data to Firestore. Without this, the script will only perform a dry run.
-  - **--path=<path-to-chords-db>**: (Optional) Specifies the local path to the `chords-db` repository if it's not in the default location.
+  - **--path=<path-to-chords-db>**: (Required) Specifies the local path to the `chords-db` repository if it's not in the default location.
   - _Example:_ `npx tsx scripts/seed/seed.ts -- --write --path=../path/to/your/chords-db`
 
 - `npx tsx scripts/test-firebase.ts`: Runs a diagnostic script to test the connection to your Firebase instance.
