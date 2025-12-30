@@ -61,64 +61,59 @@ The Chord Finder uses a combination of client-side music theory analysis and a b
 
 This structured and cleaned data allows the application to quickly and efficiently query for chords and display their diagrams.
 
+## Tech Stack
+
+- **Framework:** [Next.js](https://nextjs.org/)
+- **Language:** [TypeScript](https://www.typescriptlang.org/)
+- **Styling:** [Tailwind CSS](https://tailwindcss.com/)
+- **Database:** [Firebase Firestore](https://firebase.google.com/docs/firestore)
+- **State Management:** [React Query](https://tanstack.com/query/latest)
+
 ## Getting Started
 
-To run this project locally, follow these steps:
+To get a local copy up and running, follow these simple steps.
 
 1.  **Clone the repository:**
     ```bash
     git clone https://github.com/undefinedyara/trill-desktop.git
+    cd trill-desktop
     ```
 2.  **Install dependencies:**
     ```bash
-    cd trill-desktop
     npm install
     ```
-3.  **Set up Firebase:**
-    - Create a Firebase project.
-    - Generate a service account key
-    - Encode it into base64
-    - Include the encoded string into your local environment variables (see .env.example)
-4.  **Seed the database:**
+3.  **Set up Environment Variables:**
+
+    - Create a `.env` file in the root of the project.
+    - Create a Firebase service account and get your credentials JSON file.
+    - Encode the entire content of the JSON file to Base64. You can use an online tool or this command:
+      ```bash
+      # On macOS or Linux
+      cat /path/to/your/serviceAccountKey.json | base64
+      ```
+    - Add the Base64 string to your `.env` file as `FIREBASE_SERVICE_ACCOUNT_BASE64`.
+
+4.  **Seed the Database:**
+    - Run the seed script to populate your Firestore database with chord data. The `--write` flag is required to commit the data. Otherwise a dry-run is performed.
     ```bash
-    npx tsx scripts/seed/seed.ts
+    npm run seed -- --write
     ```
-5.  **Run the development server:**
+5.  **Run the Development Server:**
     ```bash
     npm run dev
     ```
-6.  **Open your browser:**
-    Navigate to `http://localhost:3000` to see the application.
+    - Open [http://localhost:3000](http://localhost:3000) in your browser to see the result.
 
-7.  **Scripts:**
+## Available Scripts
 
-- Database Seeding
+- `npm run dev`: Starts the development server.
+- `npm run build`: Builds the application for production.
+- `npm run start`: Runs the production-ready build.
+- `npm run lint`: Lints the project files for code quality.
+- `npx tsx scripts/seed/seed.ts`: Runs the database seeding script.
 
-Seed the Firestore database with chord data:
+  - **--write**: (Required) Commits the data to Firestore. Without this, the script will only perform a dry run.
+  - **--path=<path-to-chords-db>**: (Optional) Specifies the local path to the `chords-db` repository if it's not in the default location.
+  - _Example:_ `npx tsx scripts/seed/seed.ts -- --write --path=../path/to/your/chords-db`
 
-```bash
-
-npx tsx scripts/seed/seed.ts
-```
-
-Available flags:
-
---path=<path-to-chords> — Path to the local chords-db repository on your machine.
-
---write — Actually writes the data to Firebase. Without this flag, the script performs a dry run.
-
-Example:
-
-```bash
-npx tsx scripts/seed/seed.ts --path=C:/Users/Yara/chords-db --write
-```
-
-2. Firebase Connection Test
-
-Compile and run a script to verify Firebase connectivity:
-
-```bash
-
-npx tsc -p scripts/test-firebase.ts
-node scripts/test-firebase.js
-```
+- `npx tsx scripts/test-firebase.ts`: Runs a diagnostic script to test the connection to your Firebase instance.
