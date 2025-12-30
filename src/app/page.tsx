@@ -28,7 +28,7 @@ export default function Home() {
               arrow={"right"}
               className="hover:cursor-pointer px-6 py-3 bg-primary rounded-lg  border-solid  text-[14px] lg:text-lg  not-italic font-semibold leading-[18px]"
             >
-              Try it
+              Get started
             </Button>
           </Link>
         </div>

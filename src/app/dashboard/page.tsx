@@ -1,7 +1,17 @@
+import { Suspense } from "react";
 import { ChordLibrary } from "./sections/chordlibrary";
 import { Fretboard } from "./sections/fretboard";
 import { getChordKeys, getChordSuffixes } from "@/lib/firebase/chord-queries";
-export default async function Page({}) {
+import { Loading } from "@/components/ui/loading";
+export default async function Page() {
+  return (
+    <Suspense fallback={<Loading />}>
+      <MainSection />
+    </Suspense>
+  );
+}
+
+async function MainSection() {
   const searchData = await getChordSearchData();
   return (
     <section className="indent pt-25 pb-20 w-full h-full flex flex-col gap-16 ">
