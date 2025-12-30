@@ -1,0 +1,1 @@
+export const ASCII_OFFSET_FOR_LETTER_FRETS = 87;

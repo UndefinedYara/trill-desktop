@@ -1,19 +1,29 @@
-export function transformChord(chord: any) {
-  const positions = chord.positions;
+import { ASCII_OFFSET_FOR_LETTER_FRETS } from "../../consts";
 
-  for (const pos of positions) {
-    pos.frets = pos.frets.split("").map((f: string) => {
-      if (f === "x") return -1; // muted string
-      if (/[0-9]/.test(f)) return parseInt(f); // frets 0-9
-      return f.charCodeAt(0) - 87; // some frets use 'a', 'b', 'c' for 10, 11, 12 etc, this avoids NaN
-    });
+const normalizeFrets = (frets: string): number[] =>
+  frets.split("").map((f) => {
+    if (f === "x") return -1;
+    if (/[0-9]/.test(f)) return Number(f);
+    return f.charCodeAt(0) - ASCII_OFFSET_FOR_LETTER_FRETS; // a → 10, b → 11
+  });
 
-    pos.fingers = pos.fingers.split("").map((f: string) => parseInt(f));
+const normalizeFingers = (fingers: string): number[] =>
+  fingers.split("").map(Number);
 
-    if (pos.barres == null) pos.barres = [];
-    else if (!Array.isArray(pos.barres)) pos.barres = [pos.barres];
-    pos.capo = pos.capo === "true" ? true : !!pos.capo;
-  }
+const normalizeBarres = (barres?: number | number[]): number[] => {
+  if (barres == null) return [];
+  return Array.isArray(barres) ? barres : [barres];
+};
 
-  return chord;
+export function transformChord(chord: OriginalChord): TransformedChord {
+  return {
+    key: chord.key,
+    suffix: chord.suffix,
+    positions: chord.positions.map((pos) => ({
+      frets: normalizeFrets(pos.frets),
+      fingers: normalizeFingers(pos.fingers),
+      barres: normalizeBarres(pos.barres),
+      capo: Boolean(pos.capo),
+    })),
+  };
 }

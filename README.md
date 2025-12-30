@@ -47,7 +47,7 @@ The Chord Finder uses a combination of client-side music theory analysis and a b
 
 #### Firebase Integration
 
-- **Connection:** The application connects to Firebase using a service account configuration stored in `src/lib/firebase/service-account.json`. This allows secure access to the Firestore database from the server-side.
+- **Connection:** The application connects to Firebase using a service account configuration encoded to base64 and then decoded on the server.
 - **Database Seeding:** The chord library in Firestore is populated using a custom script (`scripts/seed/seed.ts`).
 
   - The script reads chord data from the invaluable [chords-db](https://github.com/tombatossals/chords-db) project.
@@ -76,10 +76,12 @@ To run this project locally, follow these steps:
     ```
 3.  **Set up Firebase:**
     - Create a Firebase project.
-    - Generate a service account key and save it as `src/lib/firebase/service-account.json`.
+    - Generate a service account key
+    - Encode it into base64
+    - Include the encoded string into your local environment variables (see .env.example)
 4.  **Seed the database:**
     ```bash
-    npm run seed -- --write
+    npx tsx scripts/seed/seed.ts
     ```
 5.  **Run the development server:**
     ```bash
@@ -87,3 +89,36 @@ To run this project locally, follow these steps:
     ```
 6.  **Open your browser:**
     Navigate to `http://localhost:3000` to see the application.
+
+7.  **Scripts:**
+
+- Database Seeding
+
+Seed the Firestore database with chord data:
+
+```bash
+
+npx tsx scripts/seed/seed.ts
+```
+
+Available flags:
+
+--path=<path-to-chords> — Path to the local chords-db repository on your machine.
+
+--write — Actually writes the data to Firebase. Without this flag, the script performs a dry run.
+
+Example:
+
+```bash
+npx tsx scripts/seed/seed.ts --path=C:/Users/Yara/chords-db --write
+```
+
+2. Firebase Connection Test
+
+Compile and run a script to verify Firebase connectivity:
+
+```bash
+
+npx tsc -p scripts/test-firebase.ts
+node scripts/test-firebase.js
+```

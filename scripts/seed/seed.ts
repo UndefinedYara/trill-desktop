@@ -1,3 +1,4 @@
+import path from "path";
 import {
   chordsCollection,
   keysCollection,
@@ -6,8 +7,17 @@ import {
 import { readAndNormalize } from "./helpers/read-and-normalize";
 
 async function main() {
-  const chords = readAndNormalize();
   const args = process.argv.slice(2);
+  const pathArg = args.find((arg) => arg.startsWith("--path="));
+  if (!pathArg) {
+    throw new Error("Missing --path argument");
+  }
+  const rawPath = pathArg.replace("--path=", "");
+
+  // This normalizes Windows / Unix paths safely
+  const basePath = path.resolve(rawPath);
+  console.log("Using base path:", basePath);
+  const chords = readAndNormalize(basePath);
   const chordKeys = Array.from(new Set(chords.map((chord) => chord.key)));
   const chordSuffixes = Array.from(
     new Set(chords.map((chord) => chord.suffix))
@@ -35,8 +45,8 @@ async function main() {
     console.log("DRY RUN - no data will be written to Firestore");
     console.log("Added chord:", chords[0].key + chords[0].suffix);
     console.log("Added chord shape:", chords[0]);
-    console.log(chordKeys);
-    console.log(chordSuffixes);
+    console.log("Found chord keys:", chordKeys);
+    console.log("Found chord types:", chordSuffixes);
   }
 }
 console.log("DONE seeding Firestore!");
