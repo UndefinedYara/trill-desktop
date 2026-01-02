@@ -1,9 +1,9 @@
-import { ChordType } from "ChordModule";
 import Chord from "./chord-graph/chord";
 import { Guitar } from "@/lib/instrument/guitar";
 import { ButtonLeft } from "./icons/button-left";
 import { ButtonRight } from "./icons/button-right";
 import { useState } from "react";
+import { ChordType } from "@/types/ui/chord";
 
 interface ChordPaletteProps {
   chord: {

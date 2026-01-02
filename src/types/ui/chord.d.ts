@@ -3,9 +3,9 @@ export type ChordType = {
   key: string;
   suffix: string;
   frets: number[];
-  barres?: number[];
-  capo?: boolean;
-  fingers?: number[];
+  barres: number[];
+  capo: boolean;
+  fingers: number[];
   baseFret: number;
   positions: ChordType[];
 };

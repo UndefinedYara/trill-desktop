@@ -5,7 +5,7 @@ import { Guitar } from "@/lib/instrument/guitar";
 import Chord from "@/components/ui/chord-graph/chord";
 import { useFindChordsByKeyAndSuffix } from "@/queries/chord/useFindChordsByKeyAndSuffixes";
 import { Skeleton } from "@/components/ui/skeleton";
-import { ChordType } from "ChordModule";
+import { ChordType } from "@/types/ui/chord";
 
 interface ChordLibraryProps {
   keys: string[];
