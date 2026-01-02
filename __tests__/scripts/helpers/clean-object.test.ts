@@ -30,8 +30,6 @@ describe("clean objects", () => {
     `;
 
     const result = getCleanObject(input);
-    console.log(result);
-
     expect(result).toEqual({
       key: "G",
       suffix: "/Ab",

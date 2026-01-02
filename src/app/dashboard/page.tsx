@@ -22,14 +22,9 @@ async function MainSection() {
 }
 
 async function getChordSearchData() {
-  try {
-    const [keys, suffixes] = await Promise.all([
-      getChordKeys(),
-      getChordSuffixes(),
-    ]);
-    return { keys, suffixes };
-  } catch (error) {
-    console.error(error);
-    return { keys: [], suffixes: [] };
-  }
+  const [keys, suffixes] = await Promise.all([
+    getChordKeys(),
+    getChordSuffixes(),
+  ]);
+  return { keys, suffixes };
 }

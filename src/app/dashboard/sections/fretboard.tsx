@@ -3,13 +3,9 @@ import { Fret } from "@/components/ui/fret";
 import { useState } from "react";
 import { X } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
-import { ChordType } from "ChordModule";
 import { Guitar } from "@/lib/instrument/guitar";
 import { Button } from "@/components/ui/button";
-import { convertToCanonicalArray } from "@/lib/music/observation/canonical";
-import { fretToNote } from "@/lib/instrument/fretToNote";
-import { ObservedNote } from "@/types/observed-note";
-import { resolveChord } from "@/lib/music/inference/resolveChord";
+
 import { useFindChordsByBestMatches } from "@/queries/chord/useFindChordsByBestMatches";
 import { ChordPalette } from "@/components/ui/chordpalette";
 import {
@@ -20,6 +16,8 @@ import {
   FRET_MARKERS,
   MUTED_STRING_COLOR,
 } from "@/components/ui/consts";
+import { useChordAnalysis } from "@/hooks/useChordAnalysis";
+import { ChordType } from "@/types/ui/chord";
 
 const getFretWidth = (index: number) => {
   return Math.max(INITIAL_FRET_WIDTH - index * FRET_WIDTH_DECREMENT, 0);
@@ -29,11 +27,13 @@ export function Fretboard() {
   const [fretAndStringsArray, setFretAndStringsArray] = useState<
     [number, number][]
   >([]);
-
   const [mutedStrings, setMutedStrings] = useState<number[]>([]);
-  const [bestChordMatches, setBestChordMatches] = useState<
-    { root: string; chordType: string; score: number }[]
-  >([]);
+
+  const { bestChordMatches, analyze } = useChordAnalysis(
+    fretAndStringsArray,
+    mutedStrings
+  );
+
   const chordMatchCollection = useFindChordsByBestMatches(bestChordMatches);
 
   const topScoreChord =
@@ -57,33 +57,10 @@ export function Fretboard() {
   function onClear() {
     setFretAndStringsArray([]);
     setMutedStrings([]);
-    setBestChordMatches([]);
   }
 
   function onFind() {
-    const canonicalArray = convertToCanonicalArray(
-      fretAndStringsArray,
-      mutedStrings
-    );
-    const observedNotes: ObservedNote[] = canonicalArray
-      .map((fret, string) => {
-        const noteFromFret = fretToNote(fret, string, Guitar.tunings.standard);
-        if (!noteFromFret) return null;
-        return {
-          stringIndex: string,
-          fret: fret,
-          note: noteFromFret,
-        };
-      })
-      .filter((object): object is ObservedNote => object != null);
-    const bestMatches = resolveChord(observedNotes).map((match) => {
-      return {
-        root: match.root,
-        chordType: match.chordType,
-        score: match.score,
-      };
-    });
-    setBestChordMatches(bestMatches);
+    analyze();
   }
 
   return (

@@ -1,4 +1,4 @@
-import { ObservedNote } from "@/types/observed-note";
+import { ObservedNote } from "@/types/ui/observed-note";
 import { identifyChord } from "../matching/identifyChord";
 import { collapseByPitchClass } from "./collapseByPitchClass";
 
@@ -6,6 +6,7 @@ export function resolveChord(notes: ObservedNote[]) {
   let chordMatches = [];
 
   const uniqueNotes = collapseByPitchClass(notes);
+  console.log(uniqueNotes);
   const matchedChords = identifyChord(uniqueNotes);
   chordMatches = matchedChords;
 

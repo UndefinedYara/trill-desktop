@@ -1,7 +1,6 @@
 import * as admin from "firebase-admin";
 import "dotenv/config";
 
-// Decode the base64 service account JSON from env
 const serviceAccount = JSON.parse(
   Buffer.from(process.env.FIREBASE_SERVICE_ACCOUNT_BASE64!, "base64").toString(
     "utf8"
