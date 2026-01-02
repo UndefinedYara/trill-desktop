@@ -35,14 +35,7 @@ describe("transformChord", () => {
           capo: false,
         },
         {
-          frets: [
-            "a".charCodeAt(0) - ASCII_OFFSET_FOR_LETTER_FRETS,
-            "b".charCodeAt(0) - ASCII_OFFSET_FOR_LETTER_FRETS,
-            1,
-            2,
-            -1,
-            0,
-          ],
+          frets: [10, 11, 1, 2, -1, 0],
           fingers: [1, 2, 3, 4, 5, 0],
           barres: [1, 2],
           capo: true,

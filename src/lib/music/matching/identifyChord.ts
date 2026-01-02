@@ -1,7 +1,8 @@
-import { ObservedNote } from "@/types/observed-note";
+import { ObservedNote } from "@/types/ui/observed-note";
 import { CHORD_FORMULAS, IntervalBetweenNotes } from "../theory/intervals";
 import { scoreChord } from "./scoreChord";
 import { toEnharmonicNote } from "../theory/toEnharmonicNote";
+
 export function identifyChord(noteObjects: ObservedNote[]) {
   const notes = noteObjects.map((item) => item.note);
   const bestMatches: { root: string; chordType: string; score: number }[] = [];
@@ -16,7 +17,7 @@ export function identifyChord(noteObjects: ObservedNote[]) {
       .sort((a, b) => a - b);
     for (const [chordType, formula] of Object.entries(CHORD_FORMULAS)) {
       const score = scoreChord(playedChordInterval, formula);
-      if (score > 0) {
+      if (score > 5) {
         bestMatches.push({ root, chordType, score });
       }
     }

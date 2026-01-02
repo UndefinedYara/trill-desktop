@@ -1,4 +1,4 @@
-import { ObservedNote } from "@/types/observed-note";
+import { ObservedNote } from "@/types/ui/observed-note";
 
 export function collapseByPitchClass(notes: ObservedNote[]): ObservedNote[] {
   const seen = new Set<string>();
