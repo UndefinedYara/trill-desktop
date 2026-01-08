@@ -1,7 +1,7 @@
 import { collapseByPitchClass } from "../../../../src/lib/music/inference/collapseByPitchClass";
 
 describe("collapse by pitch class", () => {
-  it("takes an array of ObeservedNotes as an input and returns a set of unique notes", () => {
+  it("takes an array of ObservedNotes as an input and returns a set of unique notes", () => {
     const input = [
       {
         stringIndex: 1,

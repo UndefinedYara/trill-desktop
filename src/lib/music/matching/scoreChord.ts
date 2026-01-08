@@ -10,6 +10,9 @@ export function scoreChord(playedChord: number[], chordFormula: number[]) {
   //what the played chord has that the formula doesn't have
   const extra = [...playedChordSet].filter((i) => !chordFormulaSet.has(i));
 
+  if (!playedChordSet.has(0)) return -Infinity; // must contain root
+  if (matching.length < 2) return -Infinity; // no trivial matches
+
   score += matching.length * 10;
   score -= missing.length * 15;
   score -= extra.length * 2;

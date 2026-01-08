@@ -23,7 +23,10 @@ export async function GET(request: NextRequest) {
 
     const chordsRef = db.collection("chords");
     const cleanKey = convertChordNotation(key);
+    console.log(suffix);
+
     const cleanSuffix = convertChordNotation(suffix);
+    console.log(cleanSuffix);
 
     let queryRef: Query = chordsRef;
 

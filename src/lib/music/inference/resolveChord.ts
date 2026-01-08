@@ -6,8 +6,8 @@ export function resolveChord(notes: ObservedNote[]) {
   let chordMatches = [];
 
   const uniqueNotes = collapseByPitchClass(notes);
-  console.log(uniqueNotes);
   const matchedChords = identifyChord(uniqueNotes);
+
   chordMatches = matchedChords;
 
   const sortedChords = chordMatches.sort(

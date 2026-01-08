@@ -5,7 +5,12 @@ import { toEnharmonicNote } from "../theory/toEnharmonicNote";
 
 export function identifyChord(noteObjects: ObservedNote[]) {
   const notes = noteObjects.map((item) => item.note);
-  const bestMatches: { root: string; chordType: string; score: number }[] = [];
+  const bestMatches: {
+    root: string;
+    chordType: string;
+    score: number;
+    formula: number[];
+  }[] = [];
 
   for (let i = 0; i < notes.length; i++) {
     const root = notes[i];
@@ -18,7 +23,7 @@ export function identifyChord(noteObjects: ObservedNote[]) {
     for (const [chordType, formula] of Object.entries(CHORD_FORMULAS)) {
       const score = scoreChord(playedChordInterval, formula);
       if (score > 5) {
-        bestMatches.push({ root, chordType, score });
+        bestMatches.push({ root, chordType, score, formula });
       }
     }
   }
@@ -28,5 +33,6 @@ export function identifyChord(noteObjects: ObservedNote[]) {
       root: toEnharmonicNote(chordMatch.root),
     };
   });
+  console.log(enharmonicNormalizedRoots);
   return enharmonicNormalizedRoots;
 }
