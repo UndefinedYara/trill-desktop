@@ -2,6 +2,7 @@ import { fretToNote } from "@/lib/instrument/fretToNote";
 import { Guitar } from "@/lib/instrument/guitar";
 import { resolveChord } from "@/lib/music/inference/resolveChord";
 import { convertToCanonicalArray } from "@/lib/music/observation/canonical";
+import { CalculateVoicing } from "@/lib/music/voicing-analysis/calculateVoicing";
 import { ObservedNote } from "@/types/ui/observed-note";
 import { useCallback, useState } from "react";
 
@@ -16,27 +17,58 @@ export function useChordAnalysis(
       fretAndStringsArray,
       mutedStrings
     );
+
     const observedNotes: ObservedNote[] = canonicalArray
       .map((fret, string) => {
         const noteFromFret = fretToNote(fret, string, Guitar.tunings.standard);
         if (!noteFromFret) return null;
         return {
           stringIndex: string,
-          fret: fret,
+          fret,
           note: noteFromFret,
         };
       })
       .filter((object): object is ObservedNote => object != null);
-    const bestMatches = resolveChord(observedNotes).map((match) => {
-      return {
-        root: match.root,
-        chordType: match.chordType,
-        score: match.score,
-      };
-    });
-    console.log(bestMatches);
 
-    setBestChordMatches(bestMatches);
+    console.log(observedNotes);
+
+    const bestMatches = resolveChord(observedNotes).map((match) => ({
+      root: match.root,
+      chordType: match.chordType,
+      score: match.score,
+      formula: match.formula,
+    }));
+
+    // 2️⃣ Add voicing info
+    const bestMatchesWithVoicing = CalculateVoicing(observedNotes, bestMatches);
+    console.log("bestMatchesWithVoicing", bestMatchesWithVoicing);
+
+    const finalMatches: ChordMatches[] = [];
+    const finalMatchesSet = new Set<string>(); // string keys for uniqueness
+
+    for (const match of bestMatchesWithVoicing) {
+      let root = match.root;
+      let chordType = match.chordType;
+
+      // Handle bass notation for DB
+      if (root.includes("/")) {
+        const [r, bass] = root.split("/");
+        root = r;
+        chordType = "/" + bass; // DB expects chordType = bass
+      }
+
+      const key = `${root}${chordType}`; // unique key for this DB entry
+      if (!finalMatchesSet.has(key)) {
+        finalMatchesSet.add(key);
+        finalMatches.push({
+          ...match,
+          root,
+          chordType,
+        });
+      }
+    }
+
+    setBestChordMatches(finalMatches);
   }, [fretAndStringsArray, mutedStrings]);
 
   return { analyze, bestChordMatches };
