@@ -30,8 +30,6 @@ export function useChordAnalysis(
       })
       .filter((object): object is ObservedNote => object != null);
 
-    console.log(observedNotes);
-
     const bestMatches = resolveChord(observedNotes).map((match) => ({
       root: match.root,
       chordType: match.chordType,
@@ -41,7 +39,6 @@ export function useChordAnalysis(
 
     // 2️⃣ Add voicing info
     const bestMatchesWithVoicing = CalculateVoicing(observedNotes, bestMatches);
-    console.log("bestMatchesWithVoicing", bestMatchesWithVoicing);
 
     const finalMatches: ChordMatches[] = [];
     const finalMatchesSet = new Set<string>(); // string keys for uniqueness

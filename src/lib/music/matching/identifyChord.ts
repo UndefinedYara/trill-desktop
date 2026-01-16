@@ -33,6 +33,5 @@ export function identifyChord(noteObjects: ObservedNote[]) {
       root: toEnharmonicNote(chordMatch.root),
     };
   });
-  console.log(enharmonicNormalizedRoots);
   return enharmonicNormalizedRoots;
 }

@@ -11,11 +11,6 @@
   --color-popover-foreground: 0 0% 98%;
 }
 
-.indent {
-  padding-left: 3rem;
-  padding-right: 3rem;
-}
-
 body {
   color: var(--foreground);
   background: var(--background);
@@ -26,12 +21,6 @@ html,
 body {
   height: 100%;
   scroll-behavior: smooth;
-}
-
-.outline-text {
-  color: white;
-  text-shadow: 2px 2px 0 #740d0d, /* Bottom-right */ -2px -2px 0 #740d0d,
-    /* Top-left */ 2px -2px 0 #740d0d, /* Top-right */ -2px 2px 0 #740d0d; /* Bottom-left */
 }
 
 /* Hide scrollbar for Chrome, Safari and Opera */
