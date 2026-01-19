@@ -32,6 +32,28 @@ Here's how it works:
 2.  **Find Chord:** Click the "Find Chord" button.
 3.  **View Results:** The application will display the most likely chord graphs for the selected notes, along with different ways to play the chord.
 
+### Authentication
+
+The application includes a complete authentication system allowing users to sign up and log in with an email and password.
+
+**Technology & Flow:**
+
+The authentication process is built using modern Next.js App Router features:
+
+1.  **UI (Client Components):** The login and signup forms (`LoginForm`, `SignUpForm`) are client components that use the `useActionState` hook to manage form state, including pending status and errors.
+2.  **Logic (Server Actions):** All core logic resides in Server Actions (`/src/app/actions/auth.ts`). When a user submits a form, the client component calls the appropriate server action.
+3.  **Validation:** The server action first validates the incoming data using `zod`, ensuring that all data is sanitized and meets the required format before any further processing.
+4.  **Authentication:** The action then uses the **Firebase Client SDK** to handle user creation (`createUserWithEmailAndPassword`) and sign-in (`signInWithEmailAndPassword`).
+5.  **State Feedback:** The result of the operation (either success or an error) is returned to the form component, which then updates the UI to display the appropriate message to the user.
+
+**Error Handling:**
+
+A centralized error-handling function (`handleFirebaseError`) intercepts specific `AuthErrorCodes` from Firebase and maps them to clean, user-friendly messages. This ensures a consistent and professional user experience during the authentication process.
+
+**Architectural Note (MVP Approach):**
+
+For this Minimum Viable Product (MVP), we have intentionally used the Firebase Client SDK on the server. This decision prioritizes simplicity and rapid development, with data access security being enforced by robust **Firebase Security Rules**. While a more scalable, long-term solution involves the Firebase Admin SDK and server-side session cookies, this approach is secure and sufficient for the current scope, which does not include role-based access control or paid API integrations.
+
 ### How it Works Under the Hood
 
 The Chord Finder uses a combination of client-side music theory analysis and a backend service to provide fast and accurate results.

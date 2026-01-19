@@ -6,6 +6,7 @@ import Chord from "@/components/ui/chord-graph/chord";
 import { useFindChordsByKeyAndSuffix } from "@/queries/chord/useFindChordsByKeyAndSuffixes";
 import { Skeleton } from "@/components/ui/skeleton";
 import { ChordType } from "@/types/ui/chord";
+import { ChordPalette } from "@/components/ui/chordpalette";
 
 interface ChordLibraryProps {
   keys: string[];
@@ -14,21 +15,18 @@ interface ChordLibraryProps {
 
 export function ChordLibrary({ keys, suffixes }: ChordLibraryProps) {
   const [activeKey, setActiveKey] = useState<string>("A");
-  const [activeSuffix, setActiveSuffix] = useState<string>("major");
+  const [activeSuffix, setActiveSuffix] = useState<string>("all");
 
   const chordCollection = useFindChordsByKeyAndSuffix(activeKey, activeSuffix);
   return (
-    <section
-      id="library"
-      className="indent w-full my-12 pb-5 flex flex-col gap-10 "
-    >
+    <section id="library" className=" w-full my-12 pb-5 flex flex-col gap-10 ">
       <div>
         <h2 className="text-4xl font-bold">Library</h2>
         <p>Discover more chords, positions, keys, and more. </p>
       </div>
       {/* Key Selection */}
       <div className="grid grid-cols-10 gap-7 ">
-        <div className="flex justify-between  gap-3 w-full col-span-10">
+        <div className="flex justify-between gap-3 w-full col-span-10">
           {keys.map((key) => (
             <div
               key={key}
@@ -43,7 +41,7 @@ export function ChordLibrary({ keys, suffixes }: ChordLibraryProps) {
             </div>
           ))}
         </div>
-        <div className="flex flex-col  gap-3 cols-span-1  max-h-screen overflow-y-scroll overflow-x-hidden p-2 left-scrollbar">
+        <div className="hidden md:flex flex-col  gap-3 cols-span-1  max-h-screen overflow-y-scroll overflow-x-hidden p-2 left-scrollbar">
           {suffixes.map((suffix) => (
             <div
               key={suffix}
@@ -58,14 +56,14 @@ export function ChordLibrary({ keys, suffixes }: ChordLibraryProps) {
             </div>
           ))}
         </div>
-        <div className="flex flex-col gap-5 col-span-9 mt-5">
+        <div className=" md:gap-5 col-span-10 md:col-span-9 mt-5">
           {chordCollection.isLoading && (
             <div className="flex justify-between gap-5">
               <Skeleton className="h-50 w-50" />
               <Skeleton className="h-50 w-50" />
-              <Skeleton className="h-50 w-50" />
-              <Skeleton className="h-50 w-50" />
-              <Skeleton className="h-50 w-50" />
+              <Skeleton className="h-50 w-50 hidden md:block" />
+              <Skeleton className="h-50 w-50 hidden md:block" />
+              <Skeleton className="h-50 w-50 hidden md:block" />
             </div>
           )}
           {chordCollection.isError && (
@@ -73,23 +71,29 @@ export function ChordLibrary({ keys, suffixes }: ChordLibraryProps) {
               <p>No chords found.</p>
             </div>
           )}
-          {chordCollection.data &&
-            chordCollection.data.map((chord: ChordType) => {
-              return (
-                <div key={chord.id} className="">
-                  <div className="grid grid-cols-4">
-                    {chord.positions &&
-                      chord.positions.map((position: ChordType, index) => (
-                        <Chord
-                          key={chord.key + chord.id + index}
-                          chord={position}
-                          instrument={Guitar}
-                        />
-                      ))}
-                  </div>
-                </div>
-              );
-            })}
+          <div className="grid grid-cols-2 md:grid-cols-1 ">
+            {chordCollection.data &&
+              chordCollection.data.map((chord: ChordType) => {
+                return (
+                  <>
+                    <div className="hidden md:flex" key={chord.id}>
+                      {chord.positions &&
+                        chord.positions.map((position: ChordType, index) => (
+                          <Chord
+                            key={chord.key + chord.id + index}
+                            chord={position}
+                            instrument={Guitar}
+                          />
+                        ))}
+                    </div>
+                    <div className="block md:hidden">
+                      <ChordPalette key={chord.key + chord.id} chord={chord} />
+                    </div>
+                  </>
+                );
+              })}
+          </div>
+
           {chordCollection.data &&
             chordCollection.data.length === 0 &&
             !chordCollection.isLoading && (

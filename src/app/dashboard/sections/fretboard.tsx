@@ -66,17 +66,17 @@ export function Fretboard() {
   return (
     <section
       id="fretboard"
-      className="indent w-full mt-12 flex flex-col justify-center gap-10 "
+      className="hidden md:flex flex-col w-full mt-12  justify-center gap-10 "
     >
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-4xl font-bold">Fretboard</h2>
+          <h2 className=" text-2xl md:text-4xl font-bold">Fretboard</h2>
           <p>
             Noodling around? Find more about the chord you just played. Enter
-            notes down below.{" "}
+            notes down below.
           </p>
         </div>
-        <div className="flex justify-end pt-10">
+        <div className="hidden md:flex  justify-end pt-10">
           <Button
             className="hover:cursor-pointer bg-transparent"
             onClick={onClear}
@@ -86,7 +86,7 @@ export function Fretboard() {
         </div>
       </div>
       {/* Fretboard */}
-      <div className="flex flex-col">
+      <div className="hidden md:flex flex-col">
         <div className="flex items-center justify-center ml-3">
           <div className="flex flex-row-reverse rounded-md w-full border border-gray-500">
             {new Array(FRET_COUNT).fill(0).map((_, index) => {
@@ -145,7 +145,7 @@ export function Fretboard() {
           <Skeleton className="w-[270px] h-full"></Skeleton>
         </div>
       )}
-      <div className="flex gap-10">
+      <div className="flex gap-10 justify-center">
         {chordMatchCollection.data &&
           topScoreChord &&
           chordMatchCollection.data.map((chord: ChordType) => {

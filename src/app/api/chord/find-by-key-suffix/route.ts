@@ -23,19 +23,19 @@ export async function GET(request: NextRequest) {
 
     const chordsRef = db.collection("chords");
     const cleanKey = convertChordNotation(key);
-    console.log(suffix);
 
     const cleanSuffix = convertChordNotation(suffix);
-    console.log(cleanSuffix);
 
     let queryRef: Query = chordsRef;
 
     queryRef = queryRef.where("key", "==", cleanKey);
-    queryRef = queryRef.where("suffix", "==", cleanSuffix);
+    if (suffix !== "all") {
+      queryRef = queryRef.where("suffix", "==", cleanSuffix);
+    }
 
     const snapshot = await queryRef.get();
     if (snapshot.empty) {
-      throw new Error("Chord collection not found or empty.");
+      return NextResponse.json({ data: [] });
     }
     const chords: ChordType[] = snapshot.docs.map(
       (doc: QueryDocumentSnapshot<DocumentData>): ChordType => {

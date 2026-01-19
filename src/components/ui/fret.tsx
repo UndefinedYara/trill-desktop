@@ -4,6 +4,7 @@ import { cn } from "@/lib/utils";
 import { String } from "./string";
 import { useEffect, useRef, useState } from "react";
 import { useIsFirstMount } from "@/hooks/useIsFirstMount";
+import { FRET_DOT_WIDTH } from "./consts";
 
 interface FretProps {
   className?: string;
@@ -35,7 +36,8 @@ export function Fret({
 
   useEffect(() => {
     if (isFirstMount) {
-      const dot = ref.current!.getBoundingClientRect().width / 2 - 10; //takeaway 10 cause it's roughly the width of the dot;
+      const dot =
+        ref.current!.getBoundingClientRect().width / 2 - FRET_DOT_WIDTH;
       setMiddlePoint(dot);
       return;
     }
