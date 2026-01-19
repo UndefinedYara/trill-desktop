@@ -22,7 +22,7 @@ export default function Home() {
           </span>
           helps you quickly identify the chords you&apos;re playing!
         </p>
-        <div className="hidden md:flex gap-2 mt-8 items-center justify-center md:justify-start ">
+        <div className="hidden md:flex  gap-2 mt-8 items-center justify-center md:justify-start  ">
           <Link href="../dashboard">
             <Button
               arrow={"right"}
@@ -31,6 +31,12 @@ export default function Home() {
               Get started
             </Button>
           </Link>
+          <p className="ml-5">
+            Or
+            <Link href="./auth/signup" className="text-primary ml-2">
+              Create an Account.
+            </Link>
+          </p>
         </div>
       </div>
       <div className="w-full md:w-1/3 h-[250px] md:h-auto relative">
@@ -43,7 +49,7 @@ export default function Home() {
           priority
         />
       </div>
-      <div className="flex md:hidden gap-2 mt-8 items-center justify-center md:justify-start ">
+      <div className="flex flex-col md:hidden gap-5 mt-8 items-center justify-center md:justify-start ">
         <Link href="../dashboard">
           <Button
             arrow={"right"}
@@ -52,6 +58,12 @@ export default function Home() {
             Get started
           </Button>
         </Link>
+        <p>
+          Don&apos;t have an account?
+          <Link href="./auth/signup" className="text-primary ml-2">
+            Create one now.
+          </Link>
+        </p>
       </div>
     </main>
   );

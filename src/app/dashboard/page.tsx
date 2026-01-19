@@ -1,8 +1,8 @@
 import { Suspense } from "react";
 import { ChordLibrary } from "./sections/chordlibrary";
 import { Fretboard } from "./sections/fretboard";
-import { getChordKeys, getChordSuffixes } from "@/lib/firebase/chord-queries";
 import { Loading } from "@/components/ui/loading";
+import { getChordKeys, getChordSuffixes } from "../actions/chord-queries";
 export default async function Page() {
   return (
     <Suspense fallback={<Loading />}>
