@@ -9,8 +9,10 @@ import { FormState } from "@/types/ui/form-state";
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
+  signOut,
 } from "firebase/auth";
 import { z } from "zod";
+import { redirect } from "next/navigation";
 
 const signUpSchema = z
   .object({
@@ -49,8 +51,17 @@ export async function signup(
   const { email, password } = validatedFields.data;
 
   try {
-    await createUserWithEmailAndPassword(auth, email, password);
-    return { type: "success", message: "User created successfully" };
+    const response = await createUserWithEmailAndPassword(
+      auth,
+      email,
+      password,
+    );
+    const userFirebaseToken = await response.user.getIdToken();
+    return {
+      type: "success",
+      idToken: userFirebaseToken,
+      message: "Account created successfully!",
+    };
   } catch (error: any) {
     if (isFirebaseError(error)) {
       return handleFirebaseError(error.code);
@@ -83,8 +94,13 @@ export async function login(
   const { email, password } = validatedFields.data;
 
   try {
-    await signInWithEmailAndPassword(auth, email, password);
-    return { type: "success", message: "User logged in" };
+    const response = await signInWithEmailAndPassword(auth, email, password);
+    const userFirebaseToken = await response.user.getIdToken();
+    return {
+      type: "success",
+      idToken: userFirebaseToken,
+      message: "Account created successfully!",
+    };
   } catch (error: any) {
     if (isFirebaseError(error)) {
       return handleFirebaseError(error.code);
