@@ -3,12 +3,12 @@ import { z } from "zod";
 export type FormState =
   | {
       type: "success";
+      idToken: string | undefined;
       message: string;
       errors?: undefined;
     }
   | {
       type: "error";
-      message?: string;
       errors:
         | {
             email?: { errors: string[] } | undefined;
