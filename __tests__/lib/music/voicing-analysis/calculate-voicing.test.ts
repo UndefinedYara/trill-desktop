@@ -1,4 +1,4 @@
-import { CalculateVoicing } from "../../../../src/lib/music/voicing-analysis/calculateVoicing";
+import { CalculateVoicing } from "../../../../src/lib/music/voicing-analysis/calculate-voicing";
 
 describe("calculate voicing", () => {
   it("takes an array of ObservedNotes and an array of ChordMatches and returns a new calculated root if the base note of the chord is not the same as the root note", () => {

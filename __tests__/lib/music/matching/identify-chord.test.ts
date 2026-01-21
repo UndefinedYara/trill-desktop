@@ -1,4 +1,4 @@
-import { identifyChord } from "../../../../src/lib/music/matching/identifyChord";
+import { identifyChord } from "../../../../src/lib/music/matching/identify-chord";
 
 describe("identify chords", () => {
   it("takes an array of ObservedNotes as an input and returns an array of best matched chords each containing root, suffix and score", () => {
@@ -32,7 +32,7 @@ describe("identify chords", () => {
     const sortedChords = identifyChord(input);
 
     const result = sortedChords.sort(
-      (chordA, chordB) => chordB.score - chordA.score
+      (chordA, chordB) => chordB.score - chordA.score,
     );
     expect(result[0].root).toEqual("A");
     expect(result[0].chordType).toEqual("major");

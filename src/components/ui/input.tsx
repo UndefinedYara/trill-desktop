@@ -1,38 +1,45 @@
 "use client";
 
-import { Eye, EyeClosed, EyeOff } from "lucide-react";
+import { Eye, EyeOff } from "lucide-react";
 import { HTMLInputTypeAttribute, useState } from "react";
+import { ErrorMessage } from "./errormessage"; // Assuming you have this
 
-interface InputProps {
+// Make props more flexible
+interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   fieldName: string;
-  label: string;
-  type: HTMLInputTypeAttribute;
+  label?: string;
   errors?: string[];
 }
 
-export function Input({ fieldName, label, type, errors }: InputProps) {
-  const [value, setValue] = useState<string>("");
-  const [peek, setPeek] = useState<boolean>(false);
-  const firstError = errors?.[0];
+export function Input({
+  fieldName,
+  label,
+  type,
+  errors,
+  ...props // Pass through any other input props
+}: InputProps) {
+  const [peek, setPeek] = useState(false);
 
   const isPassword = type === "password";
-  const inputType = isPassword && !peek ? "password" : "text";
+  // If the type is password, allow it to be toggled. Otherwise, use the provided type.
+  const inputType = isPassword ? (peek ? "text" : "password") : type;
 
   return (
-    <div className="flex flex-col gap-2">
+    <div className="w-full space-y-1">
+      {label && (
+        <label htmlFor={fieldName} className="text-sm text-neutral-300">
+          {label}
+        </label>
+      )}
       <div className="relative">
         <input
           id={fieldName}
           name={fieldName}
           type={inputType}
-          placeholder={label}
-          value={value}
-          onChange={(e) => setValue(e.target.value)}
-          aria-invalid={!!errors}
-          aria-describedby={errors ? `${fieldName}-error` : undefined}
           className="text-white px-2 py-2 pr-10 border-b border-border w-full
                      focus:outline-none focus:border-white bg-transparent
                      placeholder:text-neutral-500"
+          {...props} // Spread the rest of the props
         />
 
         {isPassword && (
@@ -40,20 +47,13 @@ export function Input({ fieldName, label, type, errors }: InputProps) {
             type="button"
             onClick={() => setPeek((prev) => !prev)}
             aria-label={peek ? "Hide password" : "Show password"}
-            className="absolute right-0 top-1/2 -translate-y-1/2 
-                       text-neutral-400 hover:text-white
-                       focus:outline-none"
+            className="absolute right-0 top-1/2 -translate-y-1/2 text-neutral-400 hover:text-white focus:outline-none"
           >
             {peek ? <Eye width={15} /> : <EyeOff width={15} />}
           </button>
         )}
       </div>
-
-      {firstError && (
-        <p id={`${fieldName}-error`} className="text-sm text-red-500">
-          {firstError}
-        </p>
-      )}
+      {errors && <ErrorMessage message={errors[0]} />}
     </div>
   );
 }

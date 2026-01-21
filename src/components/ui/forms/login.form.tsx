@@ -19,7 +19,7 @@ export function LoginForm() {
       {/* email input */}
       <Input
         fieldName="email"
-        label="Email"
+        placeholder="Email"
         type="text"
         errors={fieldErrors?.email?.errors}
       />
@@ -27,7 +27,7 @@ export function LoginForm() {
       {/* password input */}
       <Input
         fieldName="password"
-        label="Password"
+        placeholder="Password"
         type="password"
         errors={fieldErrors?.password?.errors}
       />

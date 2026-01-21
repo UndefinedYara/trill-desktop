@@ -3,10 +3,8 @@ import { Fret } from "@/components/ui/fret";
 import { useState } from "react";
 import { X } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Guitar } from "@/lib/instrument/guitar";
 import { Button } from "@/components/ui/button";
-
-import { useFindChordsByBestMatches } from "@/queries/chord/useFindChordsByBestMatches";
+import { useFindChordsByBestMatches } from "@/queries/chord/use-find-chords-by-best-matches";
 import { ChordPalette } from "@/components/ui/chordpalette";
 import {
   INITIAL_FRET_WIDTH,
@@ -16,7 +14,7 @@ import {
   FRET_MARKERS,
   MUTED_STRING_COLOR,
 } from "@/components/ui/consts";
-import { useChordAnalysis } from "@/hooks/useChordAnalysis";
+import { useChordAnalysis } from "@/hooks/use-chord-analysis";
 import { ChordType } from "@/types/ui/chord";
 
 const getFretWidth = (index: number) => {
@@ -31,7 +29,7 @@ export function Fretboard() {
 
   const { bestChordMatches, analyze } = useChordAnalysis(
     fretAndStringsArray,
-    mutedStrings
+    mutedStrings,
   );
 
   const chordMatchCollection = useFindChordsByBestMatches(bestChordMatches);
@@ -40,7 +38,7 @@ export function Fretboard() {
     bestChordMatches.length > 0
       ? bestChordMatches.reduce(
           (acc, current) => (acc.score > current.score ? acc : current),
-          bestChordMatches[0]
+          bestChordMatches[0],
         )
       : null;
 
@@ -152,7 +150,7 @@ export function Fretboard() {
             const chordScore = bestChordMatches.find(
               (bestMatchChord) =>
                 chord.key === bestMatchChord.root &&
-                chord.suffix === bestMatchChord.chordType
+                chord.suffix === bestMatchChord.chordType,
             )?.score;
 
             if (chordScore === undefined) {

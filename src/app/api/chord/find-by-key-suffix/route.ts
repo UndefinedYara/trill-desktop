@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/lib/firebase/firebase-server-config";
-import { convertChordNotation } from "@/lib/music/helpers/convertChordNotation";
+import { convertChordNotation } from "@/lib/music/helpers/convert-chord-notation";
 import {
   DocumentData,
   Query,
@@ -27,8 +27,9 @@ export async function GET(request: NextRequest) {
     const cleanSuffix = convertChordNotation(suffix);
 
     let queryRef: Query = chordsRef;
-
-    queryRef = queryRef.where("key", "==", cleanKey);
+    if (key !== "all") {
+      queryRef = queryRef.where("key", "==", cleanKey);
+    }
     if (suffix !== "all") {
       queryRef = queryRef.where("suffix", "==", cleanSuffix);
     }
@@ -37,28 +38,23 @@ export async function GET(request: NextRequest) {
     if (snapshot.empty) {
       return NextResponse.json({ data: [] });
     }
-    const chords: ChordType[] = snapshot.docs.map(
-      (doc: QueryDocumentSnapshot<DocumentData>): ChordType => {
+    const chords: Partial<ChordType>[] = snapshot.docs.map(
+      (doc: QueryDocumentSnapshot<DocumentData>): Partial<ChordType> => {
         const data = doc.data();
         return {
           id: doc.id,
           key: data.key,
           suffix: data.suffix,
-          frets: data.frets,
-          barres: data.barres,
-          capo: data.capo,
-          fingers: data.fingers,
-          baseFret: data.baseFret,
           positions: data.positions,
         };
-      }
+      },
     );
     return NextResponse.json({ data: chords });
   } catch (error: unknown) {
     console.error(error);
     return NextResponse.json(
       { message: "Something went wrong" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

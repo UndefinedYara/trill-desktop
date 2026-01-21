@@ -1,21 +1,21 @@
-import { fretToNote } from "@/lib/instrument/fretToNote";
+import { fretToNote } from "@/lib/instrument/fret-to-note";
 import { Guitar } from "@/lib/instrument/guitar";
-import { resolveChord } from "@/lib/music/inference/resolveChord";
+import { resolveChord } from "@/lib/music/inference/resolve-chord";
 import { convertToCanonicalArray } from "@/lib/music/observation/canonical";
-import { CalculateVoicing } from "@/lib/music/voicing-analysis/calculateVoicing";
+import { CalculateVoicing } from "@/lib/music/voicing-analysis/calculate-voicing";
 import { ObservedNote } from "@/types/ui/observed-note";
 import { useCallback, useState } from "react";
 
 export function useChordAnalysis(
   fretAndStringsArray: [number, number][],
-  mutedStrings: number[]
+  mutedStrings: number[],
 ) {
   const [bestChordMatches, setBestChordMatches] = useState<ChordMatches[]>([]);
 
   const analyze = useCallback(() => {
     const canonicalArray = convertToCanonicalArray(
       fretAndStringsArray,
-      mutedStrings
+      mutedStrings,
     );
 
     const observedNotes: ObservedNote[] = canonicalArray
