@@ -1,5 +1,3 @@
-"use client";
-
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import Link from "next/link";
@@ -33,7 +31,7 @@ export default function Home() {
           </Link>
           <p className="ml-5">
             Or
-            <Link href="./auth/signup" className="text-primary ml-2">
+            <Link href="./signup" className="text-primary ml-2">
               Create an Account.
             </Link>
           </p>
@@ -60,7 +58,7 @@ export default function Home() {
         </Link>
         <p>
           Don&apos;t have an account?
-          <Link href="./auth/signup" className="text-primary ml-2">
+          <Link href="./signup" className="text-primary ml-2">
             Create one now.
           </Link>
         </p>
