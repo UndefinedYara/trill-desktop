@@ -1,8 +1,8 @@
-import { convertChordNotation } from "@/lib/music/helpers/convertChordNotation";
+import { convertChordNotation } from "@/lib/music/helpers/convert-chord-notation";
 import { useQuery } from "@tanstack/react-query";
 
 export const useFindChordsByBestMatches = (
-  bestMatches: { root: string; chordType: string }[]
+  bestMatches: { root: string; chordType: string }[],
 ) => {
   return useQuery({
     queryKey: ["chords", bestMatches],

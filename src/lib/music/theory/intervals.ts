@@ -1,4 +1,4 @@
-import { ChromaticScale } from "./chromaticScale";
+import { ChromaticScale } from "./chromatic-scale";
 
 export const CHORD_FORMULAS = {
   "11": [0, 4, 7, 11, 14, 17],

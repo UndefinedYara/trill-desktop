@@ -1,10 +1,10 @@
 import { ObservedNote } from "@/types/ui/observed-note";
-import { calculateBassNote } from "./calculateBassNote";
+import { calculateBassNote } from "./calculate-bass-note";
 import { IntervalBetweenNotes } from "../theory/intervals";
 
 export function CalculateVoicing(
   observedNotes: ObservedNote[],
-  chordMatches: ChordMatches[]
+  chordMatches: ChordMatches[],
 ): ChordMatches[] {
   const matchedChordsArray = [];
 

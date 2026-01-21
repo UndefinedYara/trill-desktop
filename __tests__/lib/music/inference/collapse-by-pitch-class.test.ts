@@ -1,4 +1,4 @@
-import { collapseByPitchClass } from "../../../../src/lib/music/inference/collapseByPitchClass";
+import { collapseByPitchClass } from "../../../../src/lib/music/inference/collapse-by-pitch-class";
 
 describe("collapse by pitch class", () => {
   it("takes an array of ObservedNotes as an input and returns a set of unique notes", () => {

@@ -4,6 +4,7 @@ import { useActionState } from "react";
 import { Button } from "@/components/ui/button";
 import { signup } from "@/app/actions/auth";
 import { FormState } from "@/types/ui/form-state";
+import { ErrorMessage } from "../errormessage";
 import { Input } from "../input";
 
 const initialState: FormState = {
@@ -19,7 +20,7 @@ export function SignUpForm() {
       {/* email input */}
       <Input
         fieldName="email"
-        label="Email"
+        placeholder="Email"
         type="text"
         errors={fieldErrors?.email?.errors}
       />
@@ -27,17 +28,18 @@ export function SignUpForm() {
       {/* password input */}
       <Input
         fieldName="password"
-        label="Password"
+        placeholder="Password"
         type="password"
         errors={fieldErrors?.password?.errors}
       />
 
       <Input
         fieldName="confirmPassword"
-        label="Confirm Password"
+        placeholder="Confirm Password"
         type="password"
         errors={fieldErrors?.confirmPassword?.errors}
       />
+
       <div className="flex flex-col gap-5 text-center w-full justify-center py-5">
         <Button type="submit" disabled={pending} className="px-8 py-2">
           Sign up
@@ -46,7 +48,7 @@ export function SignUpForm() {
           <p className="text-green-500">{state.message}</p>
         )}
         {state.type === "error" && (
-          <p className="text-red-500">{fieldErrors?.form?.errors}</p>
+          <ErrorMessage message={fieldErrors?.form?.errors[0]} />
         )}
       </div>
     </form>

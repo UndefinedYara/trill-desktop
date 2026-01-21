@@ -3,7 +3,7 @@
 import { cn } from "@/lib/utils";
 import { String } from "./string";
 import { useEffect, useRef, useState } from "react";
-import { useIsFirstMount } from "@/hooks/useIsFirstMount";
+import { useIsFirstMount } from "@/hooks/use-is-first-mount";
 import { FRET_DOT_WIDTH } from "./consts";
 
 interface FretProps {
@@ -49,7 +49,7 @@ export function Fret({
       ref={ref}
       className={cn(
         "relative h-36 border border-gray-700 flex flex-col-reverse gap-3",
-        className
+        className,
       )}
     >
       {new Array(6).fill(0).map((_, index) => {

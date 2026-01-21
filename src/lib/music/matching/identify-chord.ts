@@ -1,7 +1,7 @@
 import { ObservedNote } from "@/types/ui/observed-note";
 import { CHORD_FORMULAS, IntervalBetweenNotes } from "../theory/intervals";
-import { scoreChord } from "./scoreChord";
-import { toEnharmonicNote } from "../theory/toEnharmonicNote";
+import { scoreChord } from "./score-chord";
+import { toEnharmonicNote } from "../theory/to-enharmonice-note";
 
 export function identifyChord(noteObjects: ObservedNote[]) {
   const notes = noteObjects.map((item) => item.note);

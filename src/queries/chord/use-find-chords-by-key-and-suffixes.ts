@@ -1,4 +1,4 @@
-import { convertChordNotation } from "@/lib/music/helpers/convertChordNotation";
+import { convertChordNotation } from "@/lib/music/helpers/convert-chord-notation";
 import { useQuery } from "@tanstack/react-query";
 
 export const useFindChordsByKeyAndSuffix = (key: string, suffix: string) => {
