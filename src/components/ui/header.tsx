@@ -1,7 +1,6 @@
-"use client";
-
 import Image from "next/image";
 import Link from "next/link";
+import { Me } from "./session/me";
 
 export function Header() {
   return (
@@ -22,12 +21,7 @@ export function Header() {
             </h1>
           </div>
         </Link>
-        <div className="text-sm md:text-base flex items-center justify-center gap-4 font-manrope font-light">
-          <Link href="#fretboard" className="hidden md:block">
-            Fretboard
-          </Link>
-          <Link href="#library">Chord Library</Link>
-        </div>
+        <Me />
       </div>
     </header>
   );

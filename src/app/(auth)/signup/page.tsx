@@ -13,7 +13,7 @@ export default function SignupPage() {
         </div>
 
         <SignUpForm />
-        <Link href="/auth/login" className="flex w-full justify-center gap-2">
+        <Link href="/login" className="flex w-full justify-center gap-2">
           Already have an account? <span className="text-primary">Log in.</span>
         </Link>
       </div>

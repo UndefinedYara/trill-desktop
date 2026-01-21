@@ -21,6 +21,10 @@ export async function POST(req: NextRequest) {
       .auth()
       .createSessionCookie(idToken, { expiresIn: SESSION_EXPIRES_IN });
 
+    // const userInfo = {
+    //   uid:
+    // }
+
     const response = NextResponse.json({ success: true });
     response.cookies.set({
       name: "session",

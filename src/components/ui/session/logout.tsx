@@ -35,8 +35,7 @@ export function LogOutButton() {
       loading={isLoading}
       disabled={isLoading}
       onClick={handleLogout}
-      className="px-8 py-2"
-      arrow="left"
+      className="px-6 py-2 text-sm"
     >
       Log out
     </Button>
