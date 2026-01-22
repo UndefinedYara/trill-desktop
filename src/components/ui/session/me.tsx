@@ -1,21 +1,18 @@
 import { getSession } from "@/lib/auth/get-session";
 import { UserCircle } from "lucide-react";
 import { Button } from "../button";
-import { Dialog, DialogContent, DialogTrigger } from "../dialog";
+import { Dialog, DialogContent, DialogTitle, DialogTrigger } from "../dialog";
 import { MeCard } from "../me-card";
-import { DialogTitle } from "@radix-ui/react-dialog";
 import Link from "next/link";
 export async function Me() {
   const user = await getSession();
   return user ? (
-    <div className="flex items-center">
+    <div className="flex items-center ">
       <Dialog>
-        <DialogTrigger asChild>
-          <Button className="px-0 bg-transparent">
-            <UserCircle width={20} className="text-white mr-2" />
-          </Button>
+        <DialogTrigger>
+          <UserCircle width={30} className="text-white mr-2" />
         </DialogTrigger>
-        <DialogContent className="max-w-3xl rounded-xl border-primary/70 bg-black/50">
+        <DialogContent className="rounded-2xl  bg-black/50  w-5/6 md:w-full md:max-w-3xl py-3 md:py-10 md:px-8">
           <DialogTitle />
           <MeCard user={user} />
         </DialogContent>
