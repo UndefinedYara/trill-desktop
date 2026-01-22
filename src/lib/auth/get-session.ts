@@ -14,11 +14,8 @@ export async function getSession(): Promise<SessionUser | null> {
   const session = cookieStore.get("session")?.value;
 
   if (!session) return null;
-  console.log(session);
-  console.log("here?");
   try {
     const decoded = await admin.auth().verifySessionCookie(session, true);
-    console.log(decoded);
 
     return {
       uid: decoded.uid,
@@ -28,7 +25,6 @@ export async function getSession(): Promise<SessionUser | null> {
       memberSince: new Date(decoded.auth_time * 1000),
     };
   } catch (e) {
-    console.log(e);
     return null;
   }
 }
