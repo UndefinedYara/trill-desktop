@@ -6,6 +6,7 @@ import {
   Query,
   QueryDocumentSnapshot,
 } from "firebase-admin/firestore";
+import { PAGE_LIMIT } from "@/consts";
 import { ChordType } from "@/types/ui/chord";
 
 export async function GET(request: NextRequest) {
@@ -13,6 +14,10 @@ export async function GET(request: NextRequest) {
     const url = new URL(request.url);
     const key = url.searchParams.get("key");
     const suffix = url.searchParams.get("suffix");
+    const cursor = url.searchParams.get("cursor");
+    console.log(
+      `New Request: Fetching chord by ${key} and ${suffix}. Timestamp:${new Date()}`,
+    );
 
     if (!key) {
       return NextResponse.json({ message: "Missing key" }, { status: 400 });
@@ -21,23 +26,32 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ message: "Missing suffix" }, { status: 400 });
     }
 
-    const chordsRef = db.collection("chords");
     const cleanKey = convertChordNotation(key);
-
     const cleanSuffix = convertChordNotation(suffix);
 
-    let queryRef: Query = chordsRef;
+    let queryRef: Query = db.collection("chords");
+
     if (key !== "all") {
       queryRef = queryRef.where("key", "==", cleanKey);
     }
+
     if (suffix !== "all") {
       queryRef = queryRef.where("suffix", "==", cleanSuffix);
     }
 
-    const snapshot = await queryRef.get();
-    if (snapshot.empty) {
-      return NextResponse.json({ data: [] });
+    queryRef = queryRef.orderBy("__name__");
+
+    if (cursor) {
+      const cursorDoc = await db.collection("chords").doc(cursor).get();
+      if (cursorDoc.exists) {
+        queryRef = queryRef.startAfter(cursorDoc);
+      }
     }
+
+    queryRef = queryRef.limit(PAGE_LIMIT);
+
+    const snapshot = await queryRef.get();
+
     const chords: Partial<ChordType>[] = snapshot.docs.map(
       (doc: QueryDocumentSnapshot<DocumentData>): Partial<ChordType> => {
         const data = doc.data();
@@ -49,7 +63,13 @@ export async function GET(request: NextRequest) {
         };
       },
     );
-    return NextResponse.json({ data: chords });
+
+    const lastDoc = snapshot.docs[snapshot.docs.length - 1];
+
+    return NextResponse.json({
+      data: chords,
+      nextCursor: lastDoc?.id ?? null,
+    });
   } catch (error: unknown) {
     console.error(error);
     return NextResponse.json(

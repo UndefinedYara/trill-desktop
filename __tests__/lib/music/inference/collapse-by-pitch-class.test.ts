@@ -6,28 +6,28 @@ describe("collapse by pitch class", () => {
       {
         stringIndex: 1,
         fret: 0,
-        note: "A",
+        note: "a",
       },
       {
         stringIndex: 2,
         fret: 0,
-        note: "D",
+        note: "d",
       },
       {
         stringIndex: 3,
         fret: 2,
-        note: "A",
+        note: "a",
       },
 
       {
         stringIndex: 0,
         fret: 0,
-        note: "E",
+        note: "a",
       },
       {
         stringIndex: 4,
         fret: 0,
-        note: "E",
+        note: "e",
       },
     ];
 
@@ -36,17 +36,17 @@ describe("collapse by pitch class", () => {
       {
         stringIndex: 1,
         fret: 0,
-        note: "A",
+        note: "a",
       },
       {
         stringIndex: 2,
         fret: 0,
-        note: "D",
+        note: "d",
       },
       {
-        stringIndex: 0,
+        stringIndex: 4,
         fret: 0,
-        note: "E",
+        note: "e",
       },
     ]);
   });

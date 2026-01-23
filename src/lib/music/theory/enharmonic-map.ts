@@ -1,5 +1,5 @@
 export const ENHARMONIC_MAP: Record<string, string> = {
-  "G#": "Ab",
-  "D#": "Eb",
-  "A#": "Bb",
+  "g#": "ab",
+  "d#": "eb",
+  "a#": "bb",
 };

@@ -6,27 +6,27 @@ describe("identify chords", () => {
       {
         stringIndex: 1,
         fret: 0,
-        note: "A",
+        note: "a",
       },
       {
         stringIndex: 2,
         fret: 2,
-        note: "E",
+        note: "e",
       },
       {
         stringIndex: 3,
         fret: 2,
-        note: "A",
+        note: "a",
       },
       {
         stringIndex: 4,
         fret: 2,
-        note: "C#",
+        note: "c#",
       },
       {
         stringIndex: 5,
         fret: 0,
-        note: "E",
+        note: "e",
       },
     ];
     const sortedChords = identifyChord(input);
@@ -34,7 +34,7 @@ describe("identify chords", () => {
     const result = sortedChords.sort(
       (chordA, chordB) => chordB.score - chordA.score,
     );
-    expect(result[0].root).toEqual("A");
+    expect(result[0].root).toEqual("a");
     expect(result[0].chordType).toEqual("major");
   });
 });

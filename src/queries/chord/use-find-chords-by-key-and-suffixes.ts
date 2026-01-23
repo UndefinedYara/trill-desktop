@@ -1,9 +1,14 @@
+import { PAGE_LIMIT } from "@/consts";
 import { convertChordNotation } from "@/lib/music/helpers/convert-chord-notation";
 import { useQuery } from "@tanstack/react-query";
 
-export const useFindChordsByKeyAndSuffix = (key: string, suffix: string) => {
+export const useFindChordsByKeyAndSuffix = (
+  key: string,
+  suffix: string,
+  cursor?: string,
+) => {
   return useQuery<any, any>({
-    queryKey: [key, suffix],
+    queryKey: ["chords", key, suffix, cursor],
 
     queryFn: async () => {
       const cleanKey = convertChordNotation(key);
@@ -12,10 +17,15 @@ export const useFindChordsByKeyAndSuffix = (key: string, suffix: string) => {
         key: cleanKey,
         suffix: cleanSuffix,
       });
+      if (cursor) {
+        params.set("cursor", cursor);
+      }
       const result = await fetch(`/api/chord/find-by-key-suffix?${params}`);
       const response = await result.json();
-      return response.data;
+      return { data: response.data, nextCursor: response.nextCursor };
     },
     enabled: !!key && !!suffix,
+    refetchOnWindowFocus: false,
+    refetchOnReconnect: false,
   });
 };

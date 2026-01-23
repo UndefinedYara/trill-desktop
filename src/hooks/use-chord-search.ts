@@ -1,36 +1,37 @@
-import { useCallback } from "react";
+import { useCallback, useState } from "react";
 
-export function useChordSearch(
-  chordQuery: string,
-  keys: string[],
-  suffixes: string[],
-) {
-  let activeKey: string | "all" = "all";
-  let activeSuffix: string | "all" = "all";
+export function useChordSearch(keys: string[], suffixes: string[]) {
+  const [activeKey, setActiveKey] = useState<string | "all">("all");
+  const [activeSuffix, setActiveSuffix] = useState<string | "all">("all");
 
-  const analyze = useCallback(() => {
-    chordQuery = chordQuery.trim().toLowerCase();
-    // Step 1: find key that matches the start
-    // we sort because we wanna match the longest first. so between "C" and "C#" we get "C#"
-    for (const k of keys
-      .map((k) => k.toLowerCase())
-      .sort((a, b) => b.length - a.length)) {
-      if (chordQuery.startsWith(k)) {
-        activeKey = k;
-        chordQuery = chordQuery.slice(k.length); // remove key part
-        break;
+  const analyze = useCallback(
+    (chordQuery: string) => {
+      let newQuery = chordQuery.trim().toLowerCase();
+      let foundKey: string | "all" = "all";
+      // Step 1: find key that matches the start
+      // we sort because we wanna match the longest first. so between "c" and "c#" we get "c#"
+      for (const k of keys.map((k) => k).sort((a, b) => b.length - a.length)) {
+        if (newQuery.trim().startsWith(k)) {
+          foundKey = k;
+          newQuery = newQuery.slice(k.length); // remove key part
+          break;
+        }
       }
-    }
 
-    for (const s of suffixes.sort((a, b) => b.length - a.length)) {
-      //the remaining input is the suffix
-      if (chordQuery.startsWith(s)) {
-        activeSuffix = s;
-        break;
+      let foundSuffix: string | "all" = "all";
+      for (const s of suffixes.sort((a, b) => b.length - a.length)) {
+        //the remaining input is the suffix
+        if (newQuery.trim().startsWith(s)) {
+          foundSuffix = s;
+          break;
+        }
       }
-    }
-    console.log({ activeKey, activeSuffix });
-  }, [chordQuery]);
+
+      setActiveKey(foundKey);
+      setActiveSuffix(foundSuffix);
+    },
+    [keys, suffixes],
+  );
 
   return { analyze, activeKey, activeSuffix };
 }

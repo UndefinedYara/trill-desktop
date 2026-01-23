@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useFindChordsByKeyAndSuffix } from "@/queries/chord/use-find-chords-by-key-and-suffixes";
 import { Skeleton } from "@/components/ui/skeleton";
 import { ChordType } from "@/types/ui/chord";
@@ -8,6 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Search } from "lucide-react";
 import { MemoChordPalette } from "@/components/ui/memo-chord-palette";
+import { useChordSearch } from "@/hooks/use-chord-search";
 
 interface ChordLibraryProps {
   keys: string[];
@@ -16,17 +17,40 @@ interface ChordLibraryProps {
 
 export function ChordLibrary({ keys, suffixes }: ChordLibraryProps) {
   const [chordQuery, setChordQuery] = useState<string>("");
+  const [cursor, setCursor] = useState<string | undefined>(undefined);
+  const [chords, setChords] = useState<ChordType[]>([]);
+  const { activeSuffix, activeKey, analyze } = useChordSearch(keys, suffixes);
 
-  const chordCollection = useFindChordsByKeyAndSuffix("A", "major");
-  function handleSearch() {}
+  const chordCollection = useFindChordsByKeyAndSuffix(
+    activeKey,
+    activeSuffix,
+    cursor,
+  );
+
+  useEffect(() => {
+    if (chordCollection.data) {
+      setChords((prev) =>
+        cursor
+          ? [...prev, ...chordCollection.data.data]
+          : [...chordCollection.data.data],
+      );
+    }
+  }, [chordCollection.data, cursor]);
+  function handleSearch() {
+    setCursor(undefined);
+    setChords([]);
+    analyze(chordQuery);
+  }
   return (
-    <section id="library" className="w-full my-12 pb-5 flex flex-col gap-10">
+    <section id="library" className="w-full my-12 pb-5 flex flex-col gap-10 ">
       <div>
-        <h2 className="text-4xl font-bold">Library</h2>
-        <p>Discover more chords, positions, keys, and more.</p>
+        <h2 className="text-3xl md:text-4xl font-bold text-primary">
+          Chord Library
+        </h2>
+        <p className="">Discover more chords, positions, keys, and more.</p>
       </div>
 
-      <div className="flex w-3/4">
+      <div className="flex w-full md:w-2/5">
         <Input
           fieldName={"Search"}
           placeholder={"What chord are you looking for?"}
@@ -36,7 +60,7 @@ export function ChordLibrary({ keys, suffixes }: ChordLibraryProps) {
         />
         <Button
           type="button"
-          className="bg-transparent px-0"
+          className="bg-primary/80 px-2"
           onClick={handleSearch}
         >
           <Search />
@@ -59,23 +83,29 @@ export function ChordLibrary({ keys, suffixes }: ChordLibraryProps) {
           </div>
         )}
 
-        <div className="grid grid-cols-2 md:grid-cols-5">
-          {chordCollection.data &&
-            chordCollection.data.map((chord: ChordType) => (
-              <div key={chord.key + chord.id}>
-                <MemoChordPalette chord={chord} />
-              </div>
-            ))}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-5 md:gap-12">
+          {chords.map((chord: ChordType, index) => (
+            <div key={chord.key + chord.suffix + index}>
+              <MemoChordPalette chord={chord} />
+            </div>
+          ))}
         </div>
 
-        {chordCollection.data &&
-          chordCollection.data.length === 0 &&
-          !chordCollection.isLoading && (
-            <p className="text-center py-7">
-              No chords found. Try a different key/suffix combo.
-            </p>
-          )}
+        {chords.length === 0 && !chordCollection.isLoading && (
+          <p className="text-center py-7">
+            No chords found. Try a different key/suffix combo.
+          </p>
+        )}
       </div>
+
+      {chordCollection.data?.nextCursor && (
+        <Button
+          onClick={() => setCursor(chordCollection.data.nextCursor)}
+          className="bg-transparent"
+        >
+          Load more
+        </Button>
+      )}
     </section>
   );
 }
