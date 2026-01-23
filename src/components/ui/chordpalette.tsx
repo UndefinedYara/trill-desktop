@@ -39,11 +39,11 @@ export function ChordPalette({ chord }: ChordPaletteProps) {
   }
 
   return (
-    <div className="bg-white/3 rounded-2xl p-3 flex justify-center items-center">
+    <div className="bg-white/3 rounded-2xl p-4 flex justify-center items-center">
       <div className="flex flex-col w-full items-center ">
         <div className="flex flex-col gap-2 items-center">
-          <p className="text-xl text-white/80">
-            {chord.key + " " + chord.suffix}
+          <p className="text-xl text-white/80 capitalize">
+            {chord.key + chord.suffix}
           </p>
           <p className="text-sm text-white/15">
             {scoreRating(chord.score || 0)}

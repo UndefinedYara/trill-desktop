@@ -13,7 +13,7 @@ import {
   STRING_COUNT,
   FRET_MARKERS,
   MUTED_STRING_COLOR,
-} from "@/components/ui/consts";
+} from "@/consts";
 import { useChordAnalysis } from "@/hooks/use-chord-analysis";
 import { ChordType } from "@/types/ui/chord";
 
@@ -68,7 +68,9 @@ export function Fretboard() {
     >
       <div className="flex items-center justify-between">
         <div>
-          <h2 className=" text-2xl md:text-4xl font-bold">Fretboard</h2>
+          <h2 className="text-3xl md:text-4xl font-bold text-primary">
+            Fretboard
+          </h2>
           <p>
             Noodling around? Find more about the chord you just played. Enter
             notes down below.

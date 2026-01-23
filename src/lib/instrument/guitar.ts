@@ -4,6 +4,6 @@ export const Guitar = {
   name: "Guitar",
   keys: [],
   tunings: {
-    standard: ["E", "A", "D", "G", "B", "E"],
+    standard: ["e", "a", "d", "g", "b", "e"],
   },
 };

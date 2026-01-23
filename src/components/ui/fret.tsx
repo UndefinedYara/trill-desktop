@@ -4,7 +4,7 @@ import { cn } from "@/lib/utils";
 import { String } from "./string";
 import { useEffect, useRef, useState } from "react";
 import { useIsFirstMount } from "@/hooks/use-is-first-mount";
-import { FRET_DOT_WIDTH } from "./consts";
+import { FRET_DOT_WIDTH } from "../../consts";
 
 interface FretProps {
   className?: string;

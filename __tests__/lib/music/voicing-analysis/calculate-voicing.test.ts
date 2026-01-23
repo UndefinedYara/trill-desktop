@@ -6,38 +6,38 @@ describe("calculate voicing", () => {
       {
         stringIndex: 0,
         fret: 3,
-        note: "G",
+        note: "g",
       },
       {
         stringIndex: 1,
         fret: 3,
-        note: "C",
+        note: "c",
       },
       {
         stringIndex: 2,
         fret: 2,
-        note: "E",
+        note: "e",
       },
       {
         stringIndex: 3,
         fret: 0,
-        note: "G",
+        note: "g",
       },
       {
         stringIndex: 4,
         fret: 1,
-        note: "C",
+        note: "c",
       },
       {
         stringIndex: 5,
         fret: 0,
-        note: "E",
+        note: "e",
       },
     ];
 
     const chordMatches = [
       {
-        root: "C",
+        root: "c",
         chordType: "major",
         score: 50,
         formula: [0, 4, 7],
@@ -45,7 +45,7 @@ describe("calculate voicing", () => {
     ];
 
     const result = CalculateVoicing(observedNotes, chordMatches);
-    expect(result[0].root).toEqual("C/G");
+    expect(result[0].root).toEqual("c/g");
   });
 
   it("takes an array of ObservedNotes and an array of ChordMatches and returns the root if the base note and the root are the same", () => {
@@ -53,38 +53,38 @@ describe("calculate voicing", () => {
       {
         stringIndex: 0,
         fret: 3,
-        note: "G",
+        note: "g",
       },
       {
         stringIndex: 1,
         fret: 2,
-        note: "B",
+        note: "b",
       },
       {
         stringIndex: 2,
         fret: 0,
-        note: "D",
+        note: "d",
       },
       {
         stringIndex: 3,
         fret: 0,
-        note: "G",
+        note: "g",
       },
       {
         stringIndex: 4,
         fret: 0,
-        note: "B",
+        note: "b",
       },
       {
         stringIndex: 5,
         fret: 3,
-        note: "G",
+        note: "g",
       },
     ];
 
     const chordMatches = [
       {
-        root: "G",
+        root: "g",
         chordType: "major",
         score: 50,
         formula: [0, 4, 7],
@@ -92,6 +92,6 @@ describe("calculate voicing", () => {
     ];
 
     const result = CalculateVoicing(observedNotes, chordMatches);
-    expect(result[0].root).toEqual("G");
+    expect(result[0].root).toEqual("g");
   });
 });

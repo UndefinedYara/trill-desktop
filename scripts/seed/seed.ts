@@ -18,9 +18,11 @@ async function main() {
   const basePath = path.resolve(rawPath);
   console.log("Using base path:", basePath);
   const chords = readAndNormalize(basePath);
-  const chordKeys = Array.from(new Set(chords.map((chord) => chord.key)));
+  const chordKeys = Array.from(
+    new Set(chords.map((chord) => chord.key.toLowerCase())),
+  );
   const chordSuffixes = Array.from(
-    new Set(chords.map((chord) => chord.suffix))
+    new Set(chords.map((chord) => chord.suffix.toLowerCase())),
   );
   const WRITE_RUN = args.includes("--write");
   console.log(`Total chords found: ${chords.length}`);

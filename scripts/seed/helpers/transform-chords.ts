@@ -17,8 +17,8 @@ const normalizeBarres = (barres?: number | number[]): number[] => {
 
 export function transformChord(chord: OriginalChord): TransformedChord {
   return {
-    key: chord.key,
-    suffix: chord.suffix,
+    key: chord.key.toLowerCase(),
+    suffix: chord.suffix.toLowerCase(),
     positions: chord.positions.map((pos) => ({
       frets: normalizeFrets(pos.frets),
       fingers: normalizeFingers(pos.fingers),

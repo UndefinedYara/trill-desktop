@@ -59,7 +59,6 @@ For this Minimum Viable Product (MVP), we have intentionally used the Firebase C
 The Chord Finder uses a combination of client-side music theory analysis and a backend service to provide fast and accurate results.
 
 1.  **Local Inference (Client-Side):** When you click "Find Chord", the application first analyzes the notes you've selected directly in your browser.
-
     - It converts the fret and string positions to musical notes.
     - A music theory engine then identifies the most likely chord names by comparing the selected notes to a vast database of chord formulas.
 
@@ -71,7 +70,6 @@ The Chord Finder uses a combination of client-side music theory analysis and a b
 
 - **Connection:** The application connects to Firebase using a service account configuration encoded to base64 and then decoded on the server.
 - **Database Seeding:** The chord library in Firestore is populated using a custom script (`scripts/seed/seed.ts`).
-
   - The script reads chord data from the invaluable [chords-db](https://github.com/tombatossals/chords-db) project.
   - It extracts all unique chord keys (e.g., C, G, Am) and suffixes (e.g., "major", "minor", "dim7") and stores them in separate collections for efficient lookup.
   - Finally, it iterates through and seeds the main 'chords' collection with detailed information for each chord voicing.
@@ -105,7 +103,6 @@ To get a local copy up and running, follow these simple steps.
     npm install
     ```
 3.  **Set up Environment Variables:**
-
     - Create a `.env` file in the root of the project.
     - Create a Firebase service account and get your credentials JSON file.
     - Encode the entire content of the JSON file to Base64. You can use an online tool or this command:
@@ -117,7 +114,7 @@ To get a local copy up and running, follow these simple steps.
 
 4.  **Seed the Database:**
     - Run the seed script to populate your Firestore database with chord data. The `--write` flag is required to commit the data. Otherwise a dry-run is performed.
-      
+      Note: all chord data in the database are normalized to lowercase.
     ```bash
     npx tsx scripts/seed/seed.ts -- --write --path=../path/to/your/chords-db
     ```
@@ -125,6 +122,7 @@ To get a local copy up and running, follow these simple steps.
     ```bash
     npm run dev
     ```
+
     - Open [http://localhost:3000](http://localhost:3000) in your browser to see the result.
 
 ## Available Scripts
@@ -134,7 +132,6 @@ To get a local copy up and running, follow these simple steps.
 - `npm run start`: Runs the production-ready build.
 - `npm run lint`: Lints the project files for code quality.
 - `npx tsx scripts/seed/seed.ts`: Runs the database seeding script.
-
   - **--write**: (Required) Commits the data to Firestore. Without this, the script will only perform a dry run.
   - **--path=<path-to-chords-db>**: (Required) Specifies the local path to the `chords-db` repository if it's not in the default location.
   - _Example:_ `npx tsx scripts/seed/seed.ts -- --write --path=../path/to/your/chords-db`

@@ -4,7 +4,7 @@ import { ASCII_OFFSET_FOR_LETTER_FRETS } from "../../../scripts/consts";
 describe("transformChord", () => {
   it("normalizes frets, fingers, barres, and capo correctly", () => {
     const input = {
-      key: "C",
+      key: "c",
       suffix: "maj",
       positions: [
         {
@@ -25,7 +25,7 @@ describe("transformChord", () => {
     const result = transformChord(input);
 
     expect(result).toEqual({
-      key: "C",
+      key: "c",
       suffix: "maj",
       positions: [
         {
@@ -46,7 +46,7 @@ describe("transformChord", () => {
 
   it("handles missing barres and capo safely", () => {
     const input = {
-      key: "D",
+      key: "c",
       suffix: "min",
       positions: [
         {
