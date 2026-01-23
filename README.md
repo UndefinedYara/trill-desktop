@@ -133,7 +133,7 @@ To get a local copy up and running, follow these simple steps.
 - `npm run lint`: Lints the project files for code quality.
 - `npx tsx scripts/seed/seed.ts`: Runs the database seeding script.
   - **--write**: (Required) Commits the data to Firestore. Without this, the script will only perform a dry run.
-  - **--path=<path-to-chords-db>**: (Required) Specifies the local path to the `chords-db` repository if it's not in the default location.
-  - _Example:_ `npx tsx scripts/seed/seed.ts -- --write --path=../path/to/your/chords-db`
+  - **--path=<path-to-chords-db>**: (Required) Specifies the local path to the `chords-db` repository
+  - _Example:_ `npx tsx scripts/seed/seed.ts -- --write --path=../path/to/your/chords-db/guitar/chords/folder`
 
 - `npx tsx scripts/test-firebase.ts`: Runs a diagnostic script to test the connection to your Firebase instance.
