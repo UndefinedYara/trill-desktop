@@ -1,7 +1,5 @@
 # Trill Desktop
 
-**Note:** I'm excited to announce that we'll be deploying Trill Desktop soon! Stay tuned for a live version.
-
 Trill Desktop is a web application that helps musicians identify chords from notes played on a virtual fretboard. It's a powerful tool for learning and understanding music theory.
 
 ## Demo
