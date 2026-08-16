@@ -6,3 +6,4 @@ export const FRET_WIDTH_DECREMENT = 5;
 export const FRET_DOT_WIDTH = 8;
 export const MUTED_STRING_COLOR = "#8c120c";
 export const PAGE_LIMIT = 25;
+export const ITERATION_LIMIT = 5;

@@ -37,7 +37,7 @@ export function Input({
           name={fieldName}
           type={inputType}
           className="text-white px-2 py-2 pr-10 border-b border-border w-full
-                     focus:outline-none focus:border-white bg-transparent
+                     focus:outline-none bg-transparent
                      placeholder:text-neutral-500"
           {...props} // Spread the rest of the props
         />

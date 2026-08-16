@@ -15,10 +15,10 @@ export default function LoginPage() {
         </div>
 
         <LoginForm />
-        <Link href="/signup" className="flex w-full justify-center gap-2">
+        {/* <Link href="/signup" className="flex w-full justify-center gap-2">
           Don&apos;t have an account?
           <span className="text-primary"> Sign up.</span>
-        </Link>
+        </Link> */}
       </div>
     </main>
   );

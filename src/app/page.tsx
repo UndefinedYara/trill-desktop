@@ -23,18 +23,17 @@ export default function Home() {
         <div className="hidden md:flex  gap-2 mt-8 items-center justify-center md:justify-start  ">
           <Link href="../dashboard">
             <Button
-              arrow={"right"}
               className="hover:cursor-pointer px-6 py-3 bg-primary rounded-lg  border-solid  text-lg  not-italic font-semibold leading-[18px]"
             >
               Get started
             </Button>
           </Link>
-          <p className="ml-5">
+          {/* <p className="ml-5">
             Or
             <Link href="./signup" className="text-primary ml-2">
               Create an Account.
             </Link>
-          </p>
+          </p> */}
         </div>
       </div>
       <div className="w-full md:w-1/3 h-[250px] md:h-auto relative">
@@ -50,18 +49,17 @@ export default function Home() {
       <div className="flex flex-col md:hidden gap-5 mt-8 items-center justify-center md:justify-start ">
         <Link href="../dashboard">
           <Button
-            arrow={"right"}
             className="hover:cursor-pointer px-8 py-4 bg-primary rounded-lg  border-solid  text-xl not-italic font-semibold leading-[18px]"
           >
             Get started
           </Button>
         </Link>
-        <p>
+        {/* <p>
           Don&apos;t have an account?
           <Link href="./signup" className="text-primary ml-2">
             Create one now.
           </Link>
-        </p>
+        </p> */}
       </div>
     </main>
   );

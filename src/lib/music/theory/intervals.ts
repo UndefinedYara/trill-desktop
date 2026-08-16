@@ -34,7 +34,7 @@ export const CHORD_FORMULAS = {
   "maj7#5": [0, 4, 8, 11],
   maj7: [0, 4, 7, 11],
   maj7b5: [0, 4, 6, 11],
-  maj7sus2: [0, 4, 7, 11],
+  maj7sus2: [0, 2, 7, 11],
   maj9: [0, 4, 7, 11, 14],
   major: [0, 4, 7],
   minor: [0, 3, 7],

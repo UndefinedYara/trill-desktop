@@ -22,12 +22,12 @@ export async function Me() {
     </div>
   ) : (
     <div className="flex items-center text-sm">
-      <p>
+      {/* <p>
         You are signed out.
         <Link href="/login" className="text-primary ml-1">
           Sign in?
         </Link>
-      </p>
+      </p> */}
     </div>
   );
 }

@@ -30,12 +30,15 @@ export function useChordAnalysis(
       })
       .filter((object): object is ObservedNote => object != null);
 
-    const bestMatches = resolveChord(observedNotes).map((match) => ({
-      root: match.root,
-      chordType: match.chordType,
-      score: match.score,
-      formula: match.formula,
-    }));
+
+    const bestMatches = resolveChord(observedNotes).map((match) => {
+      return {
+        root: match.root,
+        chordType: match.chordType,
+        score: match.score,
+        formula: match.formula,
+      }
+    });
 
     // 2️⃣ Add voicing info
     const bestMatchesWithVoicing = CalculateVoicing(observedNotes, bestMatches);

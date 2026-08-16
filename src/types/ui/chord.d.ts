@@ -8,6 +8,7 @@ export type ChordType = {
   fingers: number[];
   baseFret: number;
   positions: ChordType[];
+  description?: string;
 };
 
 export type InstrumentType = {

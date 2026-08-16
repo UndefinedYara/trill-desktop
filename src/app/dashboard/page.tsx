@@ -15,7 +15,7 @@ export default async function Page() {
 async function MainSection() {
   const searchData = await getChordSearchData();
   return (
-    <section className="px-5 md:px-20 pt-25 pb-20 w-full h-full flex flex-col gap-16 select-none">
+    <section className="px-5 lg:px-8 max-w-7xl mx-auto pt-25 pb-20 w-full h-full flex flex-col gap-24 select-none">
       <Fretboard />
       <ChordLibrary keys={searchData.keys} suffixes={searchData.suffixes} />
     </section>

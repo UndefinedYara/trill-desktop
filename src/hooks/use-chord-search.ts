@@ -29,6 +29,8 @@ export function useChordSearch(keys: string[], suffixes: string[]) {
 
       setActiveKey(foundKey);
       setActiveSuffix(foundSuffix);
+
+      return { foundKey, foundSuffix };
     },
     [keys, suffixes],
   );

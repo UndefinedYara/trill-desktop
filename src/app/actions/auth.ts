@@ -1,18 +1,39 @@
 "use server";
 
-import { auth } from "@/lib/firebase/firebase-client-config";
 import {
   handleFirebaseError,
   isFirebaseError,
 } from "@/lib/firebase/helpers/firebase-error-handler";
 import { FormState } from "@/types/ui/form-state";
-import {
-  createUserWithEmailAndPassword,
-  signInWithEmailAndPassword,
-  signOut,
-} from "firebase/auth";
 import { z } from "zod";
 import { redirect } from "next/navigation";
+import { createSession } from "./session";
+
+const IDENTITY_TOOLKIT_URL = process.env.IDENTITY_TOOLKIT_URL;
+const FIREBASE_API_KEY = process.env.NEXT_PUBLIC_API_KEY!;
+
+async function identityToolkitRequest(
+  endpoint: "signUp" | "signInWithPassword",
+  body: object,
+): Promise<{ idToken: string }> {
+  const res = await fetch(
+    `${IDENTITY_TOOLKIT_URL}:${endpoint}?key=${FIREBASE_API_KEY}`,
+    {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ ...body, returnSecureToken: true }),
+    },
+  );
+
+  if (!res.ok) {
+    const err = await res.json();
+    // Normalize to a Firebase-shaped error so our existing handler works
+    const code = err?.error?.message ?? "UNKNOWN_ERROR";
+    throw { code: `auth/${code.toLowerCase().replace(/_/g, "-")}` };
+  }
+
+  return res.json();
+}
 
 const signUpSchema = z
   .object({
@@ -33,6 +54,12 @@ const signUpSchema = z
     path: ["confirmPassword"],
   });
 
+const loginSchema = z.object({
+  email: z.email(),
+  password: z.string(),
+});
+
+
 export async function signup(
   prevState: FormState | null,
   formData: FormData,
@@ -51,30 +78,17 @@ export async function signup(
   const { email, password } = validatedFields.data;
 
   try {
-    const response = await createUserWithEmailAndPassword(
-      auth,
-      email,
-      password,
-    );
-    const userFirebaseToken = await response.user.getIdToken();
-    return {
-      type: "success",
-      idToken: userFirebaseToken,
-      message: "Account created successfully!",
-    };
+    const { idToken } = await identityToolkitRequest("signUp", { email, password });
+    await createSession(idToken);
   } catch (error: any) {
     if (isFirebaseError(error)) {
       return handleFirebaseError(error.code);
-    } else {
-      return { type: "error", errors: error.message };
     }
+    return { type: "error", errors: error.message };
   }
-}
 
-const loginSchema = z.object({
-  email: z.email(),
-  password: z.string(),
-});
+  redirect("/dashboard");
+}
 
 export async function login(
   prevState: FormState | null,
@@ -94,18 +108,14 @@ export async function login(
   const { email, password } = validatedFields.data;
 
   try {
-    const response = await signInWithEmailAndPassword(auth, email, password);
-    const userFirebaseToken = await response.user.getIdToken();
-    return {
-      type: "success",
-      idToken: userFirebaseToken,
-      message: "Account created successfully!",
-    };
+    const { idToken } = await identityToolkitRequest("signInWithPassword", { email, password });
+    await createSession(idToken);
   } catch (error: any) {
     if (isFirebaseError(error)) {
       return handleFirebaseError(error.code);
-    } else {
-      return { type: "error", errors: error.message };
     }
+    return { type: "error", errors: error.message };
   }
+
+  redirect("/dashboard");
 }
