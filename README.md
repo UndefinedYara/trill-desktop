@@ -1,137 +1,150 @@
-# Trill Desktop
+# Trill — Guitar Chord Intelligence
 
-Trill Desktop is a web application that helps musicians identify chords from notes played on a virtual fretboard. It's a powerful tool for learning and understanding music theory.
+> Play a chord. Describe a feeling. Trill figures out the rest.
 
-## Demo
+Trill is a guitar chord lookup and identification app that combines real-time music theory analysis with AI-powered semantic search. Type a chord name, strum notes on the interactive fretboard, or describe a vibe — Trill finds it.
 
-Here's a sneak peek of Trill Desktop in action:
+---
 
-![Trill Desktop Fretboard](public/images/demo/fretboard.png)
+## Screenshots
 
-_Caption: The user selects notes on the fretboard and the app identifies the chord._
+![Interactive Fretboard](public/images/demo/fretboard.png)
 
-![Trill Desktop App Output](public/images/demo/chordoutput.png)
+*Select notes on the fretboard and Trill identifies the chord with voicing analysis and inversion detection.*
 
-_Caption: The app displays different voicings for F major chord. along with other chord matches._
+![AI Semantic Chord Search](public/images/demo/semanticchords.png)
 
-![Trill Desktop Chord Library](public/images/demo/chordlookup.png)
+*Search by feel. Type "dark jazzy tension" or "bright summer strum" and the AI finds the closest matching chords.*
 
-_Caption: An additional feature allows users to browse different chords using the chord library._
+---
 
-## Features
+## What Makes This Interesting
 
-### Chord Finder
+### 🎸 Music Theory Engine — Built from Scratch
 
-The core feature of Trill Desktop is the Chord Finder. It allows you to select notes on a virtual guitar fretboard and identify the chord you are playing.
+The chord identification algorithm doesn't use a library. Given raw fret positions from the interactive fretboard, it:
 
-Here's how it works:
+1. Converts fret + string positions to pitch names using guitar tuning math
+2. Collapses notes to unique pitch classes (removing octave duplicates)
+3. Computes semitone intervals between every pair of notes
+4. Scores each candidate against 40+ chord formulas (major, minor, dim7, m7b5, aug9, sus2sus4...)
+5. Detects the bass note and resolves **inversions** and **slash chords** (e.g. `G/B`)
+6. Normalizes enharmonic equivalents (`C#` ↔ `Db`)
 
-1.  **Select Notes:** Click on the fretboard to select the notes of a chord.
-2.  **Find Chord:** Click the "Find Chord" button.
-3.  **View Results:** The application will display the most likely chord graphs for the selected notes, along with different ways to play the chord.
+The top 3 matches are returned with a confidence score relative to the best match.
 
-### Authentication
+### 🤖 AI Vibe Search
 
-The application includes a complete authentication system allowing users to sign up and log in with an email and password.
+Type a natural language description instead of a chord name. The app:
 
-**Technology & Flow:**
+- Converts your query into a 384-dimensional embedding using `@xenova/transformers` (`all-MiniLM-L6-v2`), running entirely in Node.js with no external API calls
+- Queries Firestore's native vector index using `findNearest` with COSINE distance
+- Returns the closest semantic matches from pre-embedded chord descriptions
 
-The authentication process is built using modern Next.js App Router features:
+The transformer pipeline is initialized once as a **singleton** — no cold start latency on repeated searches.
 
-1.  **UI (Client Components):** The login and signup forms (`LoginForm`, `SignUpForm`) are client components that use the `useActionState` hook to manage form state, including pending status and errors.
-2.  **Logic (Server Actions):** All core logic resides in Server Actions (`/src/app/actions/auth.ts`). When a user submits a form, the client component calls the appropriate server action.
-3.  **Validation:** The server action first validates the incoming data using `zod`, ensuring that all data is sanitized and meets the required format before any further processing.
-4.  **Authentication:** The action then uses the **Firebase Client SDK** to handle user creation (`createUserWithEmailAndPassword`) and sign-in (`signInWithEmailAndPassword`).
-5.  **State Feedback:** The result of the operation (either success or an error) is returned to the form component, which then updates the UI to display the appropriate message to the user.
+### ⚡ Unified Smart Search
 
-**Error Handling:**
+A single search bar auto-detects intent:
+- `"Cmaj7"` → standard key/suffix lookup against the chord library
+- `"something moody and unresolved"` → AI semantic vector search
+- The Load More pagination only appears for standard results — AI results are self-contained
 
-A centralized error-handling function (`handleFirebaseError`) intercepts specific `AuthErrorCodes` from Firebase and maps them to clean, user-friendly messages. This ensures a consistent and professional user experience during the authentication process.
-
-**Architectural Note (MVP Approach):**
-
-For this Minimum Viable Product (MVP), we have intentionally used the Firebase Client SDK on the server. This decision prioritizes simplicity and rapid development, with data access security being enforced by robust **Firebase Security Rules**. While a more scalable, long-term solution involves the Firebase Admin SDK and server-side session cookies, this approach is secure and sufficient for the current scope, which does not include role-based access control or paid API integrations.
-
-### How it Works Under the Hood
-
-The Chord Finder uses a combination of client-side music theory analysis and a backend service to provide fast and accurate results.
-
-1.  **Local Inference (Client-Side):** When you click "Find Chord", the application first analyzes the notes you've selected directly in your browser.
-    - It converts the fret and string positions to musical notes.
-    - A music theory engine then identifies the most likely chord names by comparing the selected notes to a vast database of chord formulas.
-
-2.  **Data Fetching (Server-Side):**
-    - The top 3 best matches are then sent to a server-side API.
-    - The API connects to a Firebase Firestore database to retrieve detailed chord information.
-
-#### Firebase Integration
-
-- **Connection:** The application connects to Firebase using a service account configuration encoded to base64 and then decoded on the server.
-- **Database Seeding:** The chord library in Firestore is populated using a custom script (`scripts/seed/seed.ts`).
-  - The script reads chord data from the invaluable [chords-db](https://github.com/tombatossals/chords-db) project.
-  - It extracts all unique chord keys (e.g., C, G, Am) and suffixes (e.g., "major", "minor", "dim7") and stores them in separate collections for efficient lookup.
-  - Finally, it iterates through and seeds the main 'chords' collection with detailed information for each chord voicing.
-
-- **Data Transformation:** Before being stored in the database, the raw chord data undergoes a transformation (`scripts/seed/helpers/transform-chords.ts`).
-  - Fret positions, which can be represented by numbers, 'x' (muted), or letters (for frets 10+), are normalized into a consistent numerical format. For example, 'x' becomes -1 and letters like 'a' are converted to their corresponding fret number (10).
-  - Fingerings are converted into a numerical array.
-  - Barre chord information is standardized into an array format.
-
-This structured and cleaned data allows the application to quickly and efficiently query for chords and display their diagrams.
+---
 
 ## Tech Stack
 
-- **Framework:** [Next.js](https://nextjs.org/)
-- **Language:** [TypeScript](https://www.typescriptlang.org/)
-- **Styling:** [Tailwind CSS](https://tailwindcss.com/)
-- **Database:** [Firebase Firestore](https://firebase.google.com/docs/firestore)
-- **State Management:** [React Query](https://tanstack.com/query/latest)
+| Layer | Technology |
+|---|---|
+| Framework | Next.js 16 (App Router) |
+| Language | TypeScript |
+| Styling | Tailwind CSS |
+| Database | Firebase Firestore |
+| Vector Search | Firestore native `findNearest` |
+| Embeddings | `@xenova/transformers` (all-MiniLM-L6-v2) |
+| Client State | TanStack React Query |
+| Auth | Firebase Identity Toolkit REST API + Admin SDK session cookies |
+
+---
+
+## Architecture Highlights
+
+- **Server Actions only** — no REST API routes for data fetching. All Firestore queries and auth operations run as typed Server Actions called directly from React Query hooks.
+- **Server-side auth** — login and signup use the Firebase Identity Toolkit REST API server-side (the Admin SDK can't verify passwords by design). The response `idToken` is immediately exchanged for a `httpOnly` session cookie via the Admin SDK.
+- **Offline chord seeding** — an agentic script generates semantic descriptions for every chord using a language model, then embeds them and writes them to Firestore in bulk. This is a one-time offline operation that powers the entire AI search layer.
+
+---
 
 ## Getting Started
 
-To get a local copy up and running, follow these simple steps.
+### Prerequisites
 
-1.  **Clone the repository:**
-    ```bash
-    git clone https://github.com/undefinedyara/trill-desktop.git
-    cd trill-desktop
-    ```
-2.  **Install dependencies:**
-    ```bash
-    npm install
-    ```
-3.  **Set up Environment Variables:**
-    - Create a `.env` file in the root of the project.
-    - Create a Firebase service account and get your credentials JSON file.
-    - Encode the entire content of the JSON file to Base64. You can use an online tool or this command:
-      ```bash
-      # On macOS or Linux
-      cat /path/to/your/serviceAccountKey.json | base64
-      ```
-    - Add the Base64 string to your `.env` file as `FIREBASE_SERVICE_ACCOUNT_BASE64`.
+- Node.js 18+
+- A Firebase project with Firestore enabled
+- A Firebase service account key
 
-4.  **Seed the Database:**
-    - Run the seed script to populate your Firestore database with chord data. The `--write` flag is required to commit the data. Otherwise a dry-run is performed.
-      Note: all chord data in the database are normalized to lowercase.
-    ```bash
-    npx tsx scripts/seed/seed.ts -- --write --path=../path/to/your/chords-db
-    ```
-5.  **Run the Development Server:**
-    ```bash
-    npm run dev
-    ```
+### Installation
 
-    - Open [http://localhost:3000](http://localhost:3000) in your browser to see the result.
+```bash
+git clone https://github.com/undefinedyara/trill-desktop.git
+cd trill-desktop
+npm install
+```
+
+### Environment Variables
+
+Create a `.env.local` file:
+
+```env
+# Firebase Admin (server-side)
+FIREBASE_SERVICE_ACCOUNT_BASE64=<your base64-encoded service account JSON>
+
+# Firebase Client (public)
+NEXT_PUBLIC_API_KEY=
+NEXT_PUBLIC_AUTH_DOMAIN=
+NEXT_PUBLIC_PROJECT_ID=
+NEXT_PUBLIC_STORAGE_BUCKET=
+NEXT_PUBLIC_MESSAGE_SENDER_ID=
+NEXT_PUBLIC_APP_ID=
+```
+
+To encode your service account:
+```bash
+# macOS / Linux
+cat serviceAccountKey.json | base64
+
+# Windows (PowerShell)
+[Convert]::ToBase64String([IO.File]::ReadAllBytes("serviceAccountKey.json"))
+```
+
+### Seed the Database
+
+```bash
+# Dry run (no writes)
+npx tsx scripts/seed/seed.ts -- --path=../chords-db/guitar/chords
+
+# Write to Firestore
+npx tsx scripts/seed/seed.ts -- --write --path=../chords-db/guitar/chords
+```
+
+Chord data sourced from [chords-db](https://github.com/tombatossals/chords-db). All keys and suffixes are normalized to lowercase before storage.
+
+### Run
+
+```bash
+npm run dev
+```
+
+Open [http://localhost:3000](http://localhost:3000).
+
+---
 
 ## Available Scripts
 
-- `npm run dev`: Starts the development server.
-- `npm run build`: Builds the application for production.
-- `npm run start`: Runs the production-ready build.
-- `npm run lint`: Lints the project files for code quality.
-- `npx tsx scripts/seed/seed.ts`: Runs the database seeding script.
-  - **--write**: (Required) Commits the data to Firestore. Without this, the script will only perform a dry run.
-  - **--path=<path-to-chords-db>**: (Required) Specifies the local path to the `chords-db` repository
-  - _Example:_ `npx tsx scripts/seed/seed.ts -- --write --path=../path/to/your/chords-db/guitar/chords/folder`
-
-- `npx tsx scripts/test-firebase.ts`: Runs a diagnostic script to test the connection to your Firebase instance.
+| Script | Description |
+|---|---|
+| `npm run dev` | Start development server |
+| `npm run build` | Build for production |
+| `npm run lint` | Lint the project |
+| `npx tsx scripts/seed/seed.ts` | Seed chord database |
+| `npx tsx scripts/test-firebase.ts` | Test Firebase connection |
