@@ -10,6 +10,7 @@ import { Sparkles, Loader2 } from "lucide-react";
 import { useChordSearch } from "@/hooks/use-chord-search";
 import { searchChordsByDescription } from "@/app/actions/semantic-search";
 import { ChordPalette } from "@/components/ui/chordpalette";
+import { createVectorMap } from "@/lib/agent/utils/create-vector-map";
 
 interface ChordLibraryProps {
   keys: string[];
@@ -50,8 +51,9 @@ export function ChordLibrary({ keys, suffixes }: ChordLibraryProps) {
 
     if (foundKey === "all" && foundSuffix === "all") {
       setIsAiSearching(true);
+      const queryVector = await createVectorMap(chordQuery);
       try {
-        const results = await searchChordsByDescription(chordQuery);
+        const results = await searchChordsByDescription(queryVector);
         setAiChords(results as ChordType[]);
       } catch (error) {
         console.error("Semantic search failed:", error);

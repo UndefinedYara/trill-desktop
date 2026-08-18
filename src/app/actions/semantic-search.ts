@@ -5,11 +5,10 @@ import { createVectorMap } from "@/lib/agent/utils/create-vector-map";
 import { FieldValue } from "firebase-admin/firestore";
 import { ChordType } from "@/types/ui/chord";
 
-export async function searchChordsByDescription(query: string, topN: number = 10): Promise<Partial<ChordType>[]> {
-    if (!query || query.trim() === "") {
+export async function searchChordsByDescription(queryVector: number[], topN: number = 10): Promise<Partial<ChordType>[]> {
+    if (!queryVector || queryVector.length === 0) {
         return [];
     }
-    const queryVector = await createVectorMap(query);
     const vectorQuery = chordsCollection.findNearest(
         {
             vectorField: 'vector',
@@ -18,6 +17,7 @@ export async function searchChordsByDescription(query: string, topN: number = 10
             distanceMeasure: 'COSINE'
         }
     );
+
 
     const snapshot = await vectorQuery.get();
     return snapshot.docs.map(doc => {
